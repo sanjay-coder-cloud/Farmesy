@@ -1,0 +1,6 @@
+{
+  "name": "Farmesy",
+  "description": "Smart agronomy intelligence platform for grain cultivation, dairy milk production, organic vs chemical farming analysis, fertilizer schedules, and regional village crop tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
