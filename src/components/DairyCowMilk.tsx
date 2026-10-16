@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, Calculator, CheckCircle, Droplet, Flame, HeartPulse, Milk, Sparkles, Thermometer } from 'lucide-react';
+import { Activity, Calculator, CheckCircle, Droplet, Flame, HeartPulse, Milk, Sparkles, Thermometer, ShieldCheck } from 'lucide-react';
 import { DAIRY_DATA } from '../data/cropsData';
 
 export const DairyCowMilk: React.FC = () => {
@@ -29,27 +29,47 @@ export const DairyCowMilk: React.FC = () => {
   const dailyConcentrateKg = cowCount * (avgYieldPerCow * 0.4 + 1.5); // 400g per litre + 1.5kg maintenance
 
   return (
-    <section id="dairy" className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
+    <section id="dairy" className="py-16 sm:py-24 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-2">
-            Dairy Science & Livestock Intelligence
+        
+        {/* Header with Featured Dairy Image Banner */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-3">
+              <Milk className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Dairy Science & Livestock Intelligence</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-display text-balance">
+              Cow Milk Excellence & Bovine Management
+            </h2>
+            <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+              The foundation of regenerative farming: how healthy dairy cows convert green fodder into pure, high-fat A2 milk while supplying rich bio-fertilizer for grain fields.
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900 font-display text-balance">
-            Cow Milk Excellence & Holistic Bovine Management
-          </h2>
-          <p className="mt-3 text-stone-600 text-sm sm:text-base leading-relaxed">
-            The foundation of regenerative farming: how healthy dairy cows convert green fodder into pure, high-fat, nutritious milk while supplying rich bio-fertilizer for grain fields.
-          </p>
+
+          <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <img
+              src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=800&q=80"
+              alt="Healthy dairy cows grazing on lush green pasture"
+              className="w-full h-[320px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold mb-1.5 inline-block">
+                Indigenous Gir & Sahiwal Dairy
+              </span>
+              <h3 className="text-lg font-bold">Pasture-Fed Holistic Cattle</h3>
+              <p className="text-xs text-slate-200">Rich in A2 beta-casein protein and bio-available micronutrients</p>
+            </div>
+          </div>
         </div>
 
         {/* 4 Core Quality Benchmarks */}
         <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {DAIRY_DATA.metrics.map((m, idx) => (
-            <div key={idx} className="bg-white p-5 rounded-xl border border-stone-200 shadow-xs">
-              <div className="text-stone-500 text-xs font-medium">{m.label}</div>
-              <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-800 mt-1 tabular-nums">
+            <div key={idx} className="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs transition-shadow">
+              <div className="text-slate-500 text-xs font-semibold uppercase tracking-wider">{m.label}</div>
+              <div className="text-2xl font-bold font-mono text-emerald-700 mt-1 tabular-nums">
                 {m.value}
               </div>
             </div>
@@ -57,44 +77,46 @@ export const DairyCowMilk: React.FC = () => {
         </div>
 
         {/* 2-Column Split: Management Protocols & Feed Formula */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Management Principles & Hygiene */}
           <div className="lg:col-span-7 space-y-6">
             {/* Key Practices */}
-            <div className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200 shadow-xs">
-              <h3 className="text-lg font-bold text-stone-900 font-display flex items-center gap-2 mb-4">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+              <h3 className="text-lg font-bold text-slate-900 font-display flex items-center gap-2 mb-4">
                 <Milk className="w-5 h-5 text-emerald-600" />
                 <span>Core Pillars of High Milk Yield & Cow Longevity</span>
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {DAIRY_DATA.keyPractices.map((practice, idx) => (
-                  <div key={idx} className="p-3.5 rounded-xl bg-stone-50 border border-stone-100 text-xs sm:text-sm">
-                    <strong className="text-stone-900 font-semibold block mb-1">
+                  <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-150 text-xs sm:text-sm">
+                    <strong className="text-slate-900 font-bold block mb-1">
                       {idx + 1}. {practice.label}
                     </strong>
-                    <p className="text-stone-600 leading-relaxed">{practice.text}</p>
+                    <p className="text-slate-600 leading-relaxed text-xs sm:text-sm">{practice.text}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Milking Hygiene Protocol */}
-            <div className="bg-stone-900 text-stone-100 p-6 sm:p-8 rounded-2xl border border-stone-800 shadow-md">
-              <div className="flex items-center justify-between pb-4 border-b border-stone-800 mb-4">
+            <div className="bg-emerald-50/70 p-6 sm:p-8 rounded-2xl border border-emerald-200 shadow-xs">
+              <div className="flex items-center justify-between pb-4 border-b border-emerald-200 mb-4">
                 <div className="flex items-center gap-2">
-                  <HeartPulse className="w-5 h-5 text-rose-400" />
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+                  <HeartPulse className="w-5 h-5 text-emerald-700" />
+                  <h4 className="text-sm font-bold text-emerald-950 uppercase tracking-wider">
                     5-Step Scientific Clean Milking Protocol
                   </h4>
                 </div>
-                <span className="text-xs text-stone-400">Zero-Mastitis Standard</span>
+                <span className="text-xs font-semibold text-emerald-800 bg-white px-2.5 py-1 rounded-lg border border-emerald-200 shadow-2xs">
+                  Zero-Mastitis Standard
+                </span>
               </div>
 
-              <div className="space-y-3 text-xs text-stone-300">
+              <div className="space-y-3 text-xs sm:text-sm text-slate-700">
                 {DAIRY_DATA.hygieneProtocol.map((step, idx) => (
                   <div key={idx} className="flex items-start gap-2.5">
-                    <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                     <span>{step}</span>
                   </div>
                 ))}
@@ -105,110 +127,135 @@ export const DairyCowMilk: React.FC = () => {
           {/* Right Column: Nutrition Formula & Interactive Dairy Station */}
           <div className="lg:col-span-5 space-y-6">
             {/* Scientific Total Mixed Ration (TMR) Feed Formula */}
-            <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs">
-              <h3 className="text-base font-bold text-stone-900 font-display flex items-center gap-2 mb-3">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 font-display flex items-center gap-2 mb-2">
                 <Droplet className="w-4 h-4 text-amber-500" />
                 <span>Scientific Bovine Feed Ration (TMR)</span>
               </h3>
-              <p className="text-xs text-stone-500 mb-4 leading-relaxed">
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">
                 Rumen fermentation requires strict 60:40 roughage-to-concentrate proportion to avoid acidosis and maximize milk butterfat.
               </p>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {DAIRY_DATA.feedFormula.map((feed, idx) => (
-                  <div key={idx} className="p-3 rounded-xl bg-stone-50 border border-stone-100 text-xs">
-                    <div className="flex items-center justify-between font-semibold text-stone-900 mb-1">
+                  <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-150 text-xs">
+                    <div className="flex items-center justify-between font-bold text-slate-900 mb-1">
                       <span>{feed.ingredient}</span>
-                      <span className="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                      <span className="font-mono text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded font-semibold">
                         {feed.proportion}
                       </span>
                     </div>
-                    <p className="text-stone-500 text-[11px] leading-relaxed">{feed.purpose}</p>
+                    <p className="text-slate-600 text-[11px] leading-relaxed">{feed.purpose}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Interactive Dairy Herd Simulator */}
-            <div className="bg-gradient-to-br from-emerald-900 to-stone-900 text-white p-6 rounded-2xl border border-emerald-800 shadow-lg">
-              <div className="flex items-center gap-2 pb-3 border-b border-emerald-800/80 mb-4">
-                <Calculator className="w-4 h-4 text-emerald-300" />
-                <h4 className="text-sm font-bold tracking-wide uppercase text-emerald-100">
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50/70 p-6 rounded-2xl border border-emerald-200 shadow-sm">
+              <div className="flex items-center gap-2 pb-3 border-b border-emerald-200 mb-4">
+                <Calculator className="w-4 h-4 text-emerald-700" />
+                <h4 className="text-sm font-bold tracking-wide uppercase text-emerald-950">
                   Interactive Herd Yield Simulator
                 </h4>
               </div>
 
-              {/* Controls */}
-              <div className="space-y-4 text-xs">
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-stone-300">Milking Cows in Herd:</span>
-                    <span className="font-mono font-bold text-amber-300">{cowCount} Cows</span>
+              {/* Slider for Cow Count */}
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between text-xs font-semibold text-slate-700">
+                  <span>Number of Milking Cows</span>
+                  <span className="font-mono text-emerald-800 text-sm font-bold">{cowCount} Cows</span>
+                </div>
+                <input
+                  type="range"
+                  min="2"
+                  max="100"
+                  step="2"
+                  value={cowCount}
+                  onChange={(e) => setCowCount(parseInt(e.target.value, 10))}
+                  className="w-full accent-emerald-600 cursor-pointer"
+                />
+              </div>
+
+              {/* Radio breed selector */}
+              <div className="grid grid-cols-2 gap-2 mb-4 text-xs font-medium">
+                <button
+                  type="button"
+                  onClick={() => setBreedType('indigenous')}
+                  className={`py-2 px-3 rounded-xl border text-center transition-all ${
+                    breedType === 'indigenous'
+                      ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
+                  }`}
+                >
+                  Indigenous Gir/Sahiwal (A2)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBreedType('crossbreed')}
+                  className={`py-2 px-3 rounded-xl border text-center transition-all ${
+                    breedType === 'crossbreed'
+                      ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300'
+                  }`}
+                >
+                  Crossbreed HF / Jersey
+                </button>
+              </div>
+
+              {/* Feed Quality toggle */}
+              <div className="grid grid-cols-2 gap-2 mb-5 text-xs font-medium">
+                <button
+                  type="button"
+                  onClick={() => setFeedQuality('balanced')}
+                  className={`py-1.5 px-3 rounded-xl border text-center transition-all ${
+                    feedQuality === 'balanced'
+                      ? 'bg-emerald-800 text-white border-emerald-800 font-semibold shadow-xs'
+                      : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  Balanced TMR Feed
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFeedQuality('basic')}
+                  className={`py-1.5 px-3 rounded-xl border text-center transition-all ${
+                    feedQuality === 'basic'
+                      ? 'bg-emerald-800 text-white border-emerald-800 font-semibold shadow-xs'
+                      : 'bg-white text-slate-600 border-slate-200'
+                  }`}
+                >
+                  Basic Grazing Only
+                </button>
+              </div>
+
+              {/* Output Telemetrics Grid */}
+              <div className="grid grid-cols-2 gap-3 text-xs pt-3 border-t border-emerald-200">
+                <div className="p-3 bg-white rounded-xl border border-emerald-200 shadow-2xs">
+                  <div className="text-slate-500 text-[10px] uppercase font-semibold">Daily Production</div>
+                  <div className="text-lg font-bold font-mono text-emerald-800 mt-0.5">
+                    {dailyTotalLitres.toLocaleString()} L/day
                   </div>
-                  <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    value={cowCount}
-                    onChange={(e) => setCowCount(Number(e.target.value))}
-                    className="w-full accent-emerald-400 cursor-pointer"
-                  />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-stone-300 block mb-1">Breed Category:</span>
-                    <select
-                      value={breedType}
-                      onChange={(e) => setBreedType(e.target.value as any)}
-                      aria-label="Breed Category"
-                      className="w-full bg-stone-800 text-white border border-stone-700 rounded-lg p-2 text-xs focus:ring-1 focus:ring-emerald-400"
-                    >
-                      <option value="indigenous">Indigenous Desi (Gir/Sahiwal A2)</option>
-                      <option value="crossbreed">Crossbreed (HF / Jersey)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <span className="text-stone-300 block mb-1">Feed Ration Level:</span>
-                    <select
-                      value={feedQuality}
-                      onChange={(e) => setFeedQuality(e.target.value as any)}
-                      aria-label="Feed Ration Level"
-                      className="w-full bg-stone-800 text-white border border-stone-700 rounded-lg p-2 text-xs focus:ring-1 focus:ring-emerald-400"
-                    >
-                      <option value="balanced">Balanced TMR + Silage</option>
-                      <option value="basic">Standard Farm Grazing</option>
-                    </select>
+                <div className="p-3 bg-white rounded-xl border border-emerald-200 shadow-2xs">
+                  <div className="text-slate-500 text-[10px] uppercase font-semibold">Monthly Gross Revenue</div>
+                  <div className="text-lg font-bold font-mono text-emerald-800 mt-0.5">
+                    ${Math.round(monthlyRevenue).toLocaleString()}
                   </div>
                 </div>
 
-                {/* Simulated Outputs */}
-                <div className="mt-4 pt-4 border-t border-emerald-800/80 grid grid-cols-2 gap-3 text-center">
-                  <div className="p-2.5 rounded-xl bg-stone-800/80">
-                    <span className="text-[10px] text-stone-400 uppercase block">Daily Milk Yield</span>
-                    <span className="text-lg font-bold font-mono text-emerald-300 tabular-nums">
-                      {dailyTotalLitres} L / day
-                    </span>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-stone-800/80">
-                    <span className="text-[10px] text-stone-400 uppercase block">Est. Monthly Revenue</span>
-                    <span className="text-lg font-bold font-mono text-amber-300 tabular-nums">
-                      ${monthlyRevenue.toLocaleString()}
-                    </span>
+                <div className="p-3 bg-white rounded-xl border border-emerald-200 shadow-2xs">
+                  <div className="text-slate-500 text-[10px] uppercase font-semibold">Green Fodder Need</div>
+                  <div className="text-sm font-bold font-mono text-slate-800 mt-0.5">
+                    {dailyGreenFodderKg} kg/day
                   </div>
                 </div>
 
-                <div className="pt-2 text-[11px] text-stone-300 space-y-1">
-                  <div>
-                    • Daily Green Fodder Required: <span className="font-mono text-emerald-200">{dailyGreenFodderKg} kg</span>
-                  </div>
-                  <div>
-                    • Daily Dry Straw (Cud Chewing): <span className="font-mono text-emerald-200">{dailyDryFodderKg} kg</span>
-                  </div>
-                  <div>
-                    • Projected Milk Fat: <span className="font-mono text-amber-300">{expectedFat}%</span> · SNF: <span className="font-mono text-amber-300">{expectedSNF}%</span>
+                <div className="p-3 bg-white rounded-xl border border-emerald-200 shadow-2xs">
+                  <div className="text-slate-500 text-[10px] uppercase font-semibold">Butterfat Density</div>
+                  <div className="text-sm font-bold font-mono text-amber-700 mt-0.5">
+                    {expectedFat}% Fat ({expectedSNF}% SNF)
                   </div>
                 </div>
               </div>

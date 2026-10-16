@@ -72,48 +72,68 @@ export const FertilizerAdvisor: React.FC = () => {
   };
 
   return (
-    <section id="fertilizers" className="py-16 sm:py-24 bg-white border-b border-stone-200">
+    <section id="fertilizers" className="py-16 sm:py-24 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="max-w-3xl">
-            <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-2">
-              Soil Nutrition & Precision Dosing Engine
+        {/* Header with Featured Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-3">
+              <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Soil Nutrition & Precision Dosing Engine</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900 font-display text-balance">
-              Smart Fertilizer Advisor & Dosing Calculator
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-display text-balance">
+              Smart Fertilizer Advisor & Dosing
             </h2>
-            <p className="mt-3 text-stone-600 text-sm sm:text-base leading-relaxed">
+            <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
               Generate exact, scientifically calibrated nutrition schedules tailored to your target crop physiology, soil type, and farming methodology.
             </p>
+
+            <div className="mt-6">
+              <button
+                onClick={handleGenerateLivePlan}
+                disabled={isGeneratingLive}
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap focus-visible:outline-none disabled:opacity-75"
+              >
+                {isGeneratingLive ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Computing Live Formulation...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Generate Real-Time API Prescription</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="shrink-0 flex items-center gap-3">
-            <button
-              onClick={handleGenerateLivePlan}
-              disabled={isGeneratingLive}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-emerald-800 hover:bg-emerald-700 rounded-lg shadow-sm transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:opacity-75"
-            >
-              {isGeneratingLive ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Computing Live Formulation...</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Generate Real-Time API Prescription</span>
-                </>
-              )}
-            </button>
+          <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <img
+              src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80"
+              alt="Rich fertile soil and young crop seedlings"
+              onError={(e) => {
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80';
+              }}
+              className="w-full h-[280px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold mb-1.5 inline-block">
+                Precision Nutrient Management
+              </span>
+              <h3 className="text-lg font-bold">Soil Health & Micronutrient Balancing</h3>
+              <p className="text-xs text-slate-200">ICAR and global agronomic standards for 1-acre production units</p>
+            </div>
           </div>
         </div>
 
         {/* Interactive Prescription Generator */}
-        <div className="mt-10 bg-stone-50 rounded-2xl border border-stone-200 p-6 sm:p-8">
+        <div className="bg-slate-50/70 rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Input Parameters Controls (5 cols) */}
-            <div className="lg:col-span-5 space-y-5 bg-white p-6 rounded-xl border border-stone-200 shadow-xs">
+            <div className="lg:col-span-5 space-y-5 bg-white p-6 sm:p-7 rounded-2xl border border-slate-200 shadow-sm">
               <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                 <div className="flex items-center gap-2">
                   <FlaskConical className="w-4 h-4 text-emerald-600" />
@@ -217,10 +237,10 @@ export const FertilizerAdvisor: React.FC = () => {
                       setPhilosophy('organic');
                       setLivePlan(null);
                     }}
-                    className={`p-2 text-xs font-semibold rounded-lg border text-center transition-all ${
+                    className={`p-2.5 text-xs font-semibold rounded-xl border text-center transition-all ${
                       philosophy === 'organic'
-                        ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
+                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs ring-2 ring-emerald-500/30'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
                     }`}
                   >
                     100% Organic
@@ -231,10 +251,10 @@ export const FertilizerAdvisor: React.FC = () => {
                       setPhilosophy('integrated');
                       setLivePlan(null);
                     }}
-                    className={`p-2 text-xs font-semibold rounded-lg border text-center transition-all ${
+                    className={`p-2.5 text-xs font-semibold rounded-xl border text-center transition-all ${
                       philosophy === 'integrated'
-                        ? 'bg-stone-800 text-white border-stone-800 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
+                        ? 'bg-emerald-800 text-white border-emerald-800 shadow-xs ring-2 ring-emerald-700/30'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
                     }`}
                   >
                     Integrated INM
@@ -245,10 +265,10 @@ export const FertilizerAdvisor: React.FC = () => {
                       setPhilosophy('chemical');
                       setLivePlan(null);
                     }}
-                    className={`p-2 text-xs font-semibold rounded-lg border text-center transition-all ${
+                    className={`p-2.5 text-xs font-semibold rounded-xl border text-center transition-all ${
                       philosophy === 'chemical'
-                        ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
+                        ? 'bg-amber-600 text-white border-amber-600 shadow-xs ring-2 ring-amber-500/30'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300 hover:bg-amber-50/50'
                     }`}
                   >
                     Conventional

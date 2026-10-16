@@ -16,47 +16,47 @@ export const CommodityTicker: React.FC = () => {
   ];
 
   return (
-    <div className="bg-stone-950 border-b border-stone-800 text-stone-300 text-xs py-2 overflow-hidden relative select-none">
+    <div className="bg-emerald-600 border-b border-emerald-700 text-white text-xs py-2 overflow-hidden relative select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         
         {/* Left Badge: Live Telemetry Indicator */}
-        <div className="flex items-center gap-2 shrink-0 z-10 bg-stone-950 pr-4">
+        <div className="flex items-center gap-2 shrink-0 z-10 bg-emerald-600 pr-4">
           <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
-          <span className="font-mono text-[11px] font-bold text-emerald-400 uppercase tracking-wider hidden sm:inline">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider hidden sm:inline">
             Live Agri-Mandi Telemetry
           </span>
-          <span className="font-mono text-[11px] font-bold text-emerald-400 uppercase tracking-wider sm:hidden">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider sm:hidden">
             Live
           </span>
-          <span className="text-stone-700">|</span>
+          <span className="text-emerald-300">|</span>
         </div>
 
         {/* Scrolling or Overflowing Ticker Strip */}
         <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-6 whitespace-nowrap">
           {commodities.map((item, index) => (
-            <div key={index} className="inline-flex items-center gap-2 group hover:text-white transition-colors">
-              <span className="text-stone-400 font-medium">{item.name}:</span>
-              <span className="text-stone-100 font-bold font-mono">{item.price}</span>
+            <div key={index} className="inline-flex items-center gap-2 group hover:text-emerald-100 transition-colors">
+              <span className="text-emerald-100 font-medium">{item.name}:</span>
+              <span className="text-white font-bold font-mono">{item.price}</span>
               <span
                 className={`inline-flex items-center text-[10px] font-bold font-mono ${
-                  item.isUp ? 'text-emerald-400' : 'text-rose-400'
+                  item.isUp ? 'text-emerald-200' : 'text-rose-200'
                 }`}
               >
                 {item.isUp ? <TrendingUp className="w-2.5 h-2.5 mr-0.5" /> : <TrendingDown className="w-2.5 h-2.5 mr-0.5" />}
                 {item.change}
               </span>
-              <span className="text-[10px] text-stone-600 hidden md:inline">({item.mandi})</span>
-              {index < commodities.length - 1 && <span className="text-stone-800 ml-3">·</span>}
+              <span className="text-[10px] text-emerald-200 hidden md:inline">({item.mandi})</span>
+              {index < commodities.length - 1 && <span className="text-emerald-400 ml-3">·</span>}
             </div>
           ))}
         </div>
 
         {/* Right Info: Current Sowing Context */}
-        <div className="hidden lg:flex items-center gap-2 shrink-0 z-10 bg-stone-950 pl-4 text-[11px] text-amber-400/90 font-medium">
-          <Clock className="w-3 h-3 text-amber-400" />
+        <div className="hidden lg:flex items-center gap-2 shrink-0 z-10 bg-emerald-600 pl-4 text-[11px] text-emerald-100 font-medium">
+          <Clock className="w-3 h-3" />
           <span>Active Window: Rabi Sowing Pre-Drilling</span>
         </div>
       </div>

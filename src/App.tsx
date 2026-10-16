@@ -14,6 +14,7 @@ import { VillageCropTracker } from './components/VillageCropTracker';
 import { FarmRoiCalculator } from './components/FarmRoiCalculator';
 import { PresentationModeModal } from './components/PresentationModeModal';
 import { Footer } from './components/Footer';
+import { ImageBanner } from './components/ImageBanner';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<string>('hero');
@@ -32,7 +33,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
       {/* Real-Time Agri-Mandi Commodity Ticker */}
       <CommodityTicker />
 
@@ -56,15 +57,33 @@ export default function App() {
         {/* 1. Types of Crops Grown in India & Growing Seasons (Kharif, Rabi, Zaid) */}
         <IndianCropsDirectory />
 
+        {/* Image Banner Section */}
+        <section className="py-16 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <ImageBanner
+                image="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+                title="Precision Agriculture"
+                subtitle="Modern farming techniques for sustainable yields"
+              />
+              <ImageBanner
+                image="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80"
+                title="Organic Farming"
+                subtitle="Natural methods for healthier crops and soil"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* 2. Interactive Side-by-Side Crop Comparison Studio */}
-        <section id="comparator" className="py-12 bg-stone-900 text-stone-100 border-b border-stone-800">
+        <section id="comparator" className="py-12 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CropComparisonStudio />
           </div>
         </section>
 
         {/* 3. National Regional Agro-Climatic Zones of India */}
-        <section id="agro-zones" className="py-12 bg-stone-900 text-stone-100 border-b border-stone-800">
+        <section id="agro-zones" className="py-12 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AgroClimaticZoneExplorer />
           </div>
@@ -74,7 +93,7 @@ export default function App() {
         <GrainsDeepDive />
 
         {/* 5. Precision Crop Doctor & Symptom Diagnosis (Natural vs Chemical Knockdown) */}
-        <section id="crop-doctor" className="py-12 bg-stone-900 text-stone-100 border-b border-stone-800">
+        <section id="crop-doctor" className="py-12 bg-slate-50 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <CropDoctorAdvisor />
           </div>

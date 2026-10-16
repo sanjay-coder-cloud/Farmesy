@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, BarChart3, Coins, DollarSign, Layers, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, BarChart3, Coins, DollarSign, Layers, ShieldCheck, Sparkles, TrendingUp, CheckCircle2 } from 'lucide-react';
 
 export const FarmRoiCalculator: React.FC = () => {
   const [acreage, setAcreage] = useState<number>(50);
@@ -64,36 +64,56 @@ export const FarmRoiCalculator: React.FC = () => {
   const fiveYearAdvantage = profitAdvantage * 5;
 
   return (
-    <section id="roi" className="py-16 sm:py-24 bg-white border-b border-stone-200">
+    <section id="roi" className="py-16 sm:py-24 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Header */}
-        <div className="max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-2">
-            Agri-Business Strategy & Profit Simulator
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-3">
+              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Agri-Business Strategy & Profit Simulator</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-display text-balance">
+              Farm Economics & Manager ROI Simulator
+            </h2>
+            <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+              Demonstrate to board members and farm stakeholders how transitioning to biological agronomy cuts input costs and expands net operating margins.
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900 font-display text-balance">
-            Farm Economics & Manager ROI Simulator
-          </h2>
-          <p className="mt-3 text-stone-600 text-sm sm:text-base leading-relaxed">
-            Demonstrate to board members and farm stakeholders how transitioning to biological agronomy cuts input costs and expands net operating margins.
-          </p>
+
+          <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <img
+              src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
+              alt="Golden agricultural field under sunset"
+              className="w-full h-[280px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold mb-1.5 inline-block">
+                Regenerative Farm Economics
+              </span>
+              <h3 className="text-lg font-bold">Sustainable Capital Stewardship</h3>
+              <p className="text-xs text-slate-200">Up to 62% cash input reduction with verified premium farm-gate yields</p>
+            </div>
+          </div>
         </div>
 
         {/* Interactive Calculator Workspace */}
-        <div className="mt-10 bg-stone-50 rounded-2xl border border-stone-200 p-6 sm:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="bg-slate-50/70 rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Input Sliders (5 cols) */}
-            <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-xl border border-stone-200 shadow-xs">
-              <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-stone-100">
+            <div className="lg:col-span-5 space-y-6 bg-white p-6 sm:p-7 rounded-2xl border border-slate-200 shadow-sm">
+              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-slate-150">
                 <BarChart3 className="w-4 h-4 text-emerald-600" />
                 <span>Simulation Parameters</span>
               </h3>
 
               {/* Acreage Slider */}
               <div>
-                <div className="flex justify-between items-center text-xs mb-1.5">
-                  <span className="font-semibold text-stone-700">Farm Cultivation Land:</span>
-                  <span className="font-mono font-bold text-emerald-800 text-sm">
+                <div className="flex justify-between items-center text-xs mb-2">
+                  <span className="font-semibold text-slate-700">Farm Cultivation Land:</span>
+                  <span className="font-mono font-bold text-emerald-800 text-sm bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
                     {acreage} Acres ({(acreage * 0.404).toFixed(1)} Ha)
                   </span>
                 </div>
@@ -106,7 +126,7 @@ export const FarmRoiCalculator: React.FC = () => {
                   onChange={(e) => setAcreage(Number(e.target.value))}
                   className="w-full accent-emerald-600 cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-stone-400 mt-1">
+                <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-medium">
                   <span>5 Acres</span>
                   <span>150 Acres</span>
                   <span>300 Acres</span>
@@ -115,156 +135,128 @@ export const FarmRoiCalculator: React.FC = () => {
 
               {/* Crop Selector */}
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+                <label className="text-xs font-semibold text-slate-700 block mb-2">
                   Selected Crop Model
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  <button
-                    onClick={() => setSelectedCrop('chickpea')}
-                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center transition-all ${
-                      selectedCrop === 'chickpea'
-                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    Chickpea (Pulses)
-                  </button>
-                  <button
-                    onClick={() => setSelectedCrop('wheat')}
-                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center transition-all ${
-                      selectedCrop === 'wheat'
-                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    Wheat
-                  </button>
-                  <button
-                    onClick={() => setSelectedCrop('paddy')}
-                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center transition-all ${
-                      selectedCrop === 'paddy'
-                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    Paddy / Rice
-                  </button>
-                  <button
-                    onClick={() => setSelectedCrop('mustard')}
-                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center transition-all ${
-                      selectedCrop === 'mustard'
-                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    Mustard (Oilseed)
-                  </button>
-                  <button
-                    onClick={() => setSelectedCrop('corn')}
-                    className={`py-2 px-3 text-xs font-semibold rounded-lg border text-center transition-all ${
-                      selectedCrop === 'corn'
-                        ? 'bg-stone-900 text-white border-stone-900 shadow-xs'
-                        : 'bg-stone-50 text-stone-700 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    Corn / Maize
-                  </button>
+                  {[
+                    { id: 'chickpea', name: 'Chickpea (Pulses)' },
+                    { id: 'wheat', name: 'Wheat' },
+                    { id: 'paddy', name: 'Paddy / Rice' },
+                    { id: 'mustard', name: 'Mustard (Oilseed)' },
+                    { id: 'corn', name: 'Corn / Maize' },
+                  ].map((c) => {
+                    const isSelected = selectedCrop === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedCrop(c.id as any)}
+                        className={`py-2 px-3 text-xs font-semibold rounded-xl border text-center transition-all ${
+                          isSelected
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-500/30 font-bold'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
+                        }`}
+                      >
+                        {c.name}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Cost Basis Card */}
-              <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600 space-y-1.5">
-                <div className="font-semibold text-stone-800">Per Acre Benchmark:</div>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-2">
+                <div className="font-bold text-slate-900">Per Acre Benchmark:</div>
                 <div className="flex justify-between">
                   <span>Chemical Synthetic Cost:</span>
-                  <span className="font-mono text-stone-900">${cropEconomics.chemInputCost} / acre</span>
+                  <span className="font-mono text-slate-800 font-semibold">${cropEconomics.chemInputCost} / acre</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Natural Bio-Input Cost:</span>
                   <span className="font-mono text-emerald-800 font-bold">${cropEconomics.natInputCost} / acre</span>
                 </div>
-                <div className="flex justify-between text-emerald-700 pt-1 border-t border-stone-200 font-medium">
+                <div className="flex justify-between text-emerald-800 pt-2 border-t border-slate-200 font-semibold">
                   <span>Input Cost Savings:</span>
-                  <span>-62% cash outlay</span>
+                  <span className="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded text-[11px]">-62% cash outlay</span>
                 </div>
               </div>
             </div>
 
             {/* Results Grid (7 cols) */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Natural Farming Financials */}
-                <div className="bg-emerald-950 text-white rounded-2xl p-6 border border-emerald-800 shadow-md">
-                  <div className="flex items-center justify-between pb-3 border-b border-emerald-800/80">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-emerald-300">
+                <div className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white rounded-2xl p-6 shadow-md space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-emerald-500/60">
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-100">
                       Natural Biological Farm
                     </span>
-                    <span className="text-xs font-mono bg-emerald-800/80 px-2 py-0.5 rounded text-emerald-200">
+                    <span className="text-xs font-mono bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-white font-bold">
                       {natMargin}% Margin
                     </span>
                   </div>
 
-                  <div className="mt-4">
-                    <span className="text-xs text-stone-400 block">Annual Net Operating Profit</span>
-                    <div className="text-3xl font-bold font-mono text-emerald-300 mt-1 tabular-nums">
+                  <div>
+                    <span className="text-xs text-emerald-100 block font-medium">Annual Net Operating Profit</span>
+                    <div className="text-3xl font-bold font-mono text-white mt-1 tabular-nums drop-shadow-xs">
                       ${natNetProfit.toLocaleString()}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-emerald-800/60 space-y-1 text-xs text-stone-300">
+                  <div className="pt-3 border-t border-emerald-500/60 space-y-1.5 text-xs text-emerald-100">
                     <div className="flex justify-between">
                       <span>Gross Revenue:</span>
-                      <span className="font-mono font-medium">${natGrossRevenue.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-white">${natGrossRevenue.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Total Input Cost:</span>
-                      <span className="font-mono font-medium text-emerald-400">${natTotalCost.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-emerald-200">${natTotalCost.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Chemical Farming Financials */}
-                <div className="bg-white text-stone-900 rounded-2xl p-6 border border-stone-300 shadow-xs">
-                  <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                <div className="bg-white text-slate-900 rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-150">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Chemical Conventional Farm
                     </span>
-                    <span className="text-xs font-mono bg-stone-100 px-2 py-0.5 rounded text-stone-600">
+                    <span className="text-xs font-mono bg-slate-100 px-2.5 py-0.5 rounded-full text-slate-700 font-semibold">
                       {chemMargin}% Margin
                     </span>
                   </div>
 
-                  <div className="mt-4">
-                    <span className="text-xs text-stone-500 block">Annual Net Operating Profit</span>
-                    <div className="text-3xl font-bold font-mono text-stone-900 mt-1 tabular-nums">
+                  <div>
+                    <span className="text-xs text-slate-500 block font-medium">Annual Net Operating Profit</span>
+                    <div className="text-3xl font-bold font-mono text-slate-900 mt-1 tabular-nums">
                       ${chemNetProfit.toLocaleString()}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-stone-100 space-y-1 text-xs text-stone-600">
+                  <div className="pt-3 border-t border-slate-150 space-y-1.5 text-xs text-slate-600">
                     <div className="flex justify-between">
                       <span>Gross Revenue:</span>
-                      <span className="font-mono font-medium">${chemGrossRevenue.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-slate-900">${chemGrossRevenue.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Total Input Cost:</span>
-                      <span className="font-mono font-medium text-rose-600">${chemTotalCost.toLocaleString()}</span>
+                      <span className="font-mono font-bold text-rose-600">${chemTotalCost.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Inspiring Bottom Executive Callout */}
-              <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-stone-900 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-400 text-stone-900 flex items-center justify-center shrink-0 shadow-xs">
+              <div className="p-6 rounded-2xl bg-amber-50/80 border border-amber-200 text-slate-900 flex items-start gap-4 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-amber-400 text-amber-950 flex items-center justify-center shrink-0 shadow-xs">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-stone-900 font-display">
+                  <div className="text-sm font-bold text-amber-950 font-display">
                     Strategic Agribusiness Horizon: +${profitAdvantage.toLocaleString()} / Year Extra Surplus
                   </div>
-                  <p className="text-xs text-stone-700 mt-1 leading-relaxed">
-                    Over a 5-year farm stewardship cycle, adopting Farmesy’s natural grain & dairy bio-slurry practices yields an accumulated capital surplus of <strong className="text-emerald-900 font-semibold font-mono">${fiveYearAdvantage.toLocaleString()}</strong>, while regenerating topsoil organic carbon.
+                  <p className="text-xs text-slate-700 mt-1 leading-relaxed">
+                    Over a 5-year farm stewardship cycle, adopting Farmesy’s natural grain & dairy bio-slurry practices yields an accumulated capital surplus of <strong className="text-emerald-900 font-bold font-mono">${fiveYearAdvantage.toLocaleString()}</strong>, while regenerating topsoil organic carbon.
                   </p>
                 </div>
               </div>

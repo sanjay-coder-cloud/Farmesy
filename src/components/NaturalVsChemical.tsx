@@ -110,49 +110,68 @@ export const NaturalVsChemical: React.FC = () => {
     COMPARISON_DIMENSIONS[0];
 
   return (
-    <section id="comparison" className="py-16 sm:py-24 bg-stone-50 border-b border-stone-200">
+    <section id="comparison" className="py-16 sm:py-24 bg-slate-50/60 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-2">
-            Agronomic Decision Architecture
+        {/* Section Header with Split Banner Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-10">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Agronomic Decision Architecture</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-display text-balance">
+              Natural Organic vs Chemical Farming
+            </h2>
+            <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+              An executive, data-driven analysis of how food grains grow under pure biological regeneration versus conventional synthetic inputs.
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900 font-display text-balance">
-            Natural Organic vs Chemical Farming
-          </h2>
-          <p className="mt-3 text-stone-600 text-sm sm:text-base leading-relaxed">
-            An executive, data-driven analysis of how food grains grow under pure biological regeneration versus conventional synthetic inputs.
-          </p>
+
+          <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <img
+              src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80"
+              alt="Natural agriculture field with healthy crops"
+              className="w-full h-[280px] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold mb-1.5 inline-block">
+                Regenerative Soil Ecology
+              </span>
+              <h3 className="text-lg font-bold">Living Microbes vs Synthetic Minerals</h3>
+              <p className="text-xs text-slate-200">Comparing 5-year soil humus trajectory, farmer net margins, and grain safety</p>
+            </div>
+          </div>
         </div>
 
         {/* View mode buttons */}
-        <div className="mt-8 flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-lg w-fit">
+        <div className="mt-8 flex items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl w-fit shadow-xs">
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
+            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'matrix'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             Direct Lens Comparison
           </button>
           <button
             onClick={() => setActiveTab('proscons')}
-            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
+            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'proscons'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             Advantages & Disadvantages
           </button>
           <button
             onClick={() => setActiveTab('timeline')}
-            className={`px-4 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
+            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'timeline'
-                ? 'bg-white text-stone-900 shadow-sm'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             5-Year Soil & Yield Curve
@@ -164,7 +183,7 @@ export const NaturalVsChemical: React.FC = () => {
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Dimensions Selector Sidebar */}
             <div className="lg:col-span-4 space-y-2">
-              <div className="text-xs font-semibold uppercase text-stone-500 mb-3 tracking-wider">
+              <div className="text-xs font-semibold uppercase text-slate-500 mb-3 tracking-wider">
                 Compare By Agronomic Pillar
               </div>
               {COMPARISON_DIMENSIONS.map((dim) => {
@@ -175,8 +194,8 @@ export const NaturalVsChemical: React.FC = () => {
                     onClick={() => setSelectedDimensionId(dim.id)}
                     className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-center justify-between ${
                       isActive
-                        ? 'bg-emerald-900 text-white border-emerald-900 shadow-sm'
-                        : 'bg-white text-stone-800 border-stone-200 hover:border-emerald-600'
+                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm font-semibold ring-2 ring-emerald-500/30'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
                     }`}
                   >
                     <span className="text-sm font-semibold">{dim.title}</span>

@@ -423,8 +423,8 @@ Return ONLY a valid JSON object matching this schema:
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Farmesy Full-Stack Server running at http://0.0.0.0:${PORT}`);
+  app.listen(PORT, 'localhost', () => {
+    console.log(`Farmesy Full-Stack Server running at http://localhost:${PORT}`);
   });
 }
 

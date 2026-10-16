@@ -23,7 +23,8 @@ import {
   Zap,
   Info,
   Droplets,
-  Award
+  Award,
+  ArrowRight
 } from 'lucide-react';
 import {
   INDIAN_CROP_TYPES,
@@ -31,6 +32,7 @@ import {
   CropTypeCategory,
   SeasonalCategory
 } from '../data/indianCropsData';
+import { getCropImage, CATEGORY_IMAGES } from '../data/cropImages';
 
 interface LiveCropReport {
   id: string;
@@ -82,7 +84,7 @@ export const IndianCropsDirectory: React.FC = () => {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [seasonFilter, setSeasonFilter] = useState<string>('all');
-  
+
   // Real-time inspection modal/drawer state
   const [inspectCropModal, setInspectCropModal] = useState<boolean>(false);
   const [inspectingCropName, setInspectingCropName] = useState<string>('Rice (Paddy)');
@@ -90,8 +92,6 @@ export const IndianCropsDirectory: React.FC = () => {
   const [liveReport, setLiveReport] = useState<LiveCropReport | null>(null);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
-  // Backdrop toggle: 2nd Image (Cotton sunset) applied to 1st category (Food Crops)
-  const [categoryBackdropTheme, setCategoryBackdropTheme] = useState<'cotton-sunset' | 'standard'>('cotton-sunset');
 
   // Selected Category
   const activeCategory = INDIAN_CROP_TYPES[selectedCategoryIndex] || INDIAN_CROP_TYPES[0];
@@ -197,74 +197,67 @@ export const IndianCropsDirectory: React.FC = () => {
     setIsSpeaking(true);
   };
 
+  const activeCategoryImg = CATEGORY_IMAGES[activeCategory.id] || CATEGORY_IMAGES['food-crops'];
+
   return (
-    <section id="indian-crops" className="py-16 sm:py-24 bg-stone-900 text-stone-100 border-b border-stone-800">
+    <section id="indian-crops" className="py-16 sm:py-24 bg-slate-50/70 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-stone-800">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-slate-200">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800/80 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-3">
-              <Sprout className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold tracking-wide mb-3">
+              <Sprout className="w-3.5 h-3.5 text-emerald-600" />
               <span>National Agricultural Directory & Typology</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-slate-900 tracking-tight">
               Types of Crops Grown in India
             </h2>
-            <p className="mt-3 text-stone-400 text-sm sm:text-base max-w-3xl leading-relaxed">
+            <p className="mt-3 text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
               Explore all 10 foundational classifications of Indian agriculture—from primary food staples and golden cash crops to protein pulses, plantation estates, and nutritious fodder—aligned with the 3 major growing seasons (Kharif, Rabi, and Zaid).
             </p>
           </div>
 
           {/* Quick Metrics Bar */}
-          <div className="flex items-center gap-3 sm:gap-6 bg-stone-950/70 p-4 rounded-xl border border-stone-800 shrink-0">
+          <div className="flex items-center gap-3 sm:gap-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm shrink-0">
             <div className="text-center px-2">
-              <div className="text-2xl font-bold font-display text-emerald-400">10</div>
-              <div className="text-[11px] text-stone-400 uppercase tracking-wider">Crop Types</div>
+              <div className="text-2xl font-bold font-display text-emerald-600">10</div>
+              <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">Crop Types</div>
             </div>
-            <div className="w-px h-8 bg-stone-800" />
+            <div className="w-px h-8 bg-slate-200" />
             <div className="text-center px-2">
-              <div className="text-2xl font-bold font-display text-amber-400">3</div>
-              <div className="text-[11px] text-stone-400 uppercase tracking-wider">Seasons</div>
+              <div className="text-2xl font-bold font-display text-amber-600">3</div>
+              <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">Seasons</div>
             </div>
-            <div className="w-px h-8 bg-stone-800" />
+            <div className="w-px h-8 bg-slate-200" />
             <div className="text-center px-2">
-              <div className="text-2xl font-bold font-display text-sky-400">50+</div>
-              <div className="text-[11px] text-stone-400 uppercase tracking-wider">Indian Crops</div>
-            </div>
-            <div className="w-px h-8 bg-stone-800" />
-            <div className="text-center px-2">
-              <div className="text-2xl font-bold font-display text-rose-400 flex items-center justify-center gap-1">
-                <Zap className="w-4 h-4 fill-rose-400 text-rose-400 animate-pulse" />
-                Live
-              </div>
-              <div className="text-[11px] text-stone-400 uppercase tracking-wider">Gemini API</div>
+              <div className="text-2xl font-bold font-display text-sky-600">50+</div>
+              <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">Major Crops</div>
             </div>
           </div>
         </div>
 
-        {/* Real-time sync feedback toast banner */}
+        {/* Toast Feedback Notification */}
         {feedbackToast && (
-          <div className="mt-6 p-3.5 rounded-xl bg-emerald-950/90 border border-emerald-700 text-emerald-200 text-xs sm:text-sm flex items-center justify-between shadow-lg">
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 animate-spin" />
+          <div className="mt-4 p-3.5 rounded-xl bg-emerald-600 text-white text-xs font-medium flex items-center justify-between shadow-lg animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-200 animate-pulse" />
               <span>{feedbackToast}</span>
             </div>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-900/60 px-2 py-0.5 rounded">
-              Real-Time Feed
-            </span>
+            <button onClick={() => setFeedbackToast(null)} className="text-emerald-200 hover:text-white font-bold ml-4">✕</button>
           </div>
         )}
 
-        {/* View Navigation Tabs */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center p-1 bg-stone-950 rounded-xl border border-stone-800">
+        {/* Unified Tab Navigation Bar & Search Filters */}
+        <div className="mt-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          {/* Main 3 View Mode Switchers */}
+          <div className="flex items-center p-1 bg-white rounded-xl border border-slate-200 shadow-xs w-fit">
             <button
               onClick={() => setActiveTab('types')}
               className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${
                 activeTab === 'types'
                   ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-white'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <Layers className="w-4 h-4" />
@@ -275,7 +268,7 @@ export const IndianCropsDirectory: React.FC = () => {
               className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${
                 activeTab === 'seasons'
                   ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-white'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <Calendar className="w-4 h-4" />
@@ -286,10 +279,10 @@ export const IndianCropsDirectory: React.FC = () => {
               className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all flex items-center gap-2 ${
                 activeTab === 'live-desk'
                   ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-white'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
-              <Zap className="w-4 h-4 text-amber-300" />
+              <Zap className="w-4 h-4 text-amber-500" />
               <span>Real-Time Live Intel Desk</span>
             </button>
           </div>
@@ -297,18 +290,18 @@ export const IndianCropsDirectory: React.FC = () => {
           {/* Quick Search & Filter Controls */}
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <div className="relative flex-1 sm:w-64">
-              <Search className="w-4 h-4 text-stone-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search any crop (e.g. Rice, Cotton, Tea)..."
-                className="w-full pl-9 pr-3 py-1.5 bg-stone-950 border border-stone-800 rounded-lg text-xs text-stone-200 placeholder-stone-500 focus:outline-none focus:border-emerald-500"
+                className="w-full pl-9 pr-8 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-xs"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-300 text-xs"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
                 >
                   ✕
                 </button>
@@ -318,7 +311,7 @@ export const IndianCropsDirectory: React.FC = () => {
             <select
               value={seasonFilter}
               onChange={(e) => setSeasonFilter(e.target.value)}
-              className="px-3 py-1.5 bg-stone-950 border border-stone-800 rounded-lg text-xs text-stone-300 focus:outline-none focus:border-emerald-500"
+              className="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-xs"
             >
               <option value="all">All Seasons</option>
               <option value="kharif">Kharif Only</option>
@@ -333,7 +326,7 @@ export const IndianCropsDirectory: React.FC = () => {
           <div className="mt-8 space-y-8">
             
             {/* Category Selector Pill Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2.5">
               {INDIAN_CROP_TYPES.map((cat, idx) => {
                 const isSelected = selectedCategoryIndex === idx;
                 return (
@@ -343,19 +336,19 @@ export const IndianCropsDirectory: React.FC = () => {
                       setSelectedCategoryIndex(idx);
                       setSearchQuery('');
                     }}
-                    className={`p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                    className={`p-3 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between ${
                       isSelected
-                        ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/50'
-                        : 'bg-stone-950/60 border-stone-800 text-stone-400 hover:border-stone-700 hover:text-stone-200'
+                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-md ring-2 ring-emerald-500/30'
+                        : 'bg-white border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50/50 hover:text-emerald-900 shadow-xs'
                     }`}
                   >
-                    <span className="text-[10px] font-mono text-emerald-400 font-semibold">
+                    <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-emerald-100' : 'text-emerald-600'}`}>
                       #{String(cat.categoryNumber).padStart(2, '0')}
                     </span>
-                    <span className="text-xs font-semibold tracking-tight mt-1 truncate">
+                    <span className="text-xs font-bold tracking-tight mt-1 truncate">
                       {cat.name.replace(' Crops', '')}
                     </span>
-                    <span className="text-[10px] text-stone-500 mt-0.5">
+                    <span className={`text-[10px] mt-0.5 font-medium ${isSelected ? 'text-emerald-100' : 'text-slate-400'}`}>
                       {cat.crops.length} crops
                     </span>
                   </button>
@@ -363,204 +356,159 @@ export const IndianCropsDirectory: React.FC = () => {
               })}
             </div>
 
-            {/* Active Category Hero Card */}
-            <div className={`p-6 sm:p-8 rounded-2xl border shadow-xl relative overflow-hidden transition-all duration-700 ${
-              (activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && categoryBackdropTheme === 'cotton-sunset'
-                ? 'bg-gradient-to-br from-[#2a1005] via-[#451a03]/80 to-stone-950 border-amber-500/40 shadow-amber-950/20'
-                : 'bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 border-stone-800'
-            }`}>
-              {/* Dynamic Sunset / Cotton Artwork Background when cotton-sunset is active */}
-              {(activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && categoryBackdropTheme === 'cotton-sunset' && (
-                <div className="absolute inset-0 pointer-events-none opacity-25">
-                  <svg className="w-full h-full object-cover" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" fill="none">
-                    <circle cx="680" cy="80" r="90" fill="#f59e0b" fillOpacity="0.3" />
-                    <circle cx="680" cy="80" r="30" fill="#fde68a" fillOpacity="0.7" />
-                    {/* Cotton stalks */}
-                    <path d="M 600 300 Q 640 220 630 140" stroke="#78350f" strokeWidth="4" />
-                    <circle cx="630" cy="140" r="18" fill="#ffffff" />
-                    <circle cx="642" cy="148" r="14" fill="#ffffff" />
-                    <circle cx="618" cy="148" r="14" fill="#ffffff" />
-                    <circle cx="630" cy="158" r="15" fill="#ffffff" />
-                    <path d="M 720 300 Q 750 200 735 120" stroke="#78350f" strokeWidth="4" />
-                    <circle cx="735" cy="120" r="20" fill="#ffffff" />
-                  </svg>
-                </div>
-              )}
-
-              <div className="absolute right-0 top-0 w-96 h-96 bg-emerald-900/10 rounded-full blur-3xl pointer-events-none" />
-              
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="px-3 py-1 rounded-md bg-emerald-900/50 border border-emerald-700 text-emerald-300 text-xs font-mono font-bold">
-                      Category {activeCategory.categoryNumber} of 10
-                    </span>
-                    <span className="text-xs text-stone-400 uppercase tracking-widest font-semibold">
-                      {activeCategory.tagline}
-                    </span>
-
-                    {/* 2nd Image Backdrop Indicator & Switcher for Category 1 */}
-                    {(activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && (
-                      <button
-                        onClick={() => setCategoryBackdropTheme(categoryBackdropTheme === 'cotton-sunset' ? 'standard' : 'cotton-sunset')}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition-colors"
-                        title="Toggle 2nd Image (Blooming Cotton Sunset) background"
-                      >
-                        <Sun className="w-3 h-3 text-amber-400" />
-                        <span>
-                          {categoryBackdropTheme === 'cotton-sunset'
-                            ? '🌅 2nd Image Backdrop Active'
-                            : '🌾 Switch to 2nd Image Backdrop'}
-                        </span>
-                      </button>
-                    )}
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-bold font-display text-white flex items-center gap-3">
-                    <span>{activeCategory.name}</span>
-                    {activeCategory.categoryNumber === 1 && categoryBackdropTheme === 'cotton-sunset' && (
-                      <span className="text-xs font-normal text-amber-300 font-sans bg-amber-950/60 border border-amber-800/80 px-2 py-0.5 rounded-md">
-                        Enhanced with Cotton Sunset Background
-                      </span>
-                    )}
-                  </h3>
-
-                  <p className="text-stone-300 text-sm max-w-2xl leading-relaxed">
-                    {activeCategory.definition}
-                  </p>
-                </div>
-
-                <div className="shrink-0 flex items-center gap-3">
-                  <button
-                    onClick={() => handleFetchRealtimeForCrop(activeCategory.crops[0].name, activeCategory.name)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-all shadow-md hover:-translate-y-0.5"
-                  >
-                    <Zap className="w-3.5 h-3.5 text-amber-300" />
-                    <span>Live Gemini Update for {activeCategory.crops[0].name}</span>
-                  </button>
-                </div>
+            {/* Active Category Hero Card with Background Image */}
+            <div className="rounded-2xl border border-slate-200 shadow-lg relative overflow-hidden bg-white">
+              {/* Background Image with Overlay */}
+              <div className="absolute inset-0 z-0">
+                <img
+                  src={activeCategoryImg}
+                  alt={activeCategory.name}
+                  className="w-full h-full object-cover opacity-15"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/80" />
               </div>
 
-              {/* Roster of Crops in this category */}
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 relative z-10">
-                {activeCategory.crops.map((crop, cIdx) => (
-                  <div
-                    key={crop.name}
-                    className="p-5 rounded-xl bg-stone-950/80 border border-stone-800 hover:border-emerald-600/60 transition-all flex flex-col justify-between group hover:shadow-lg hover:shadow-emerald-950/30"
-                  >
-                    <div>
-                      {/* Card Title Bar */}
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <div className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-                            <span>{crop.name}</span>
+              <div className="p-6 sm:p-8 relative z-10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-2 max-w-3xl">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+                        Category {activeCategory.categoryNumber} of 10
+                      </span>
+                      <span className="text-xs text-slate-500 uppercase tracking-widest font-semibold">
+                        {activeCategory.tagline}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl sm:text-3xl font-bold font-display text-slate-900">
+                      {activeCategory.name}
+                    </h3>
+
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      {activeCategory.definition}
+                    </p>
+                  </div>
+
+                  <div className="shrink-0 flex items-center gap-3">
+                    <button
+                      onClick={() => handleFetchRealtimeForCrop(activeCategory.crops[0].name, activeCategory.name)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                    >
+                      <Zap className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Live Intel for {activeCategory.crops[0].name}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Roster of Crops in this category */}
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {activeCategory.crops.map((crop) => {
+                    const cropImg = getCropImage(crop.name);
+                    return (
+                      <div
+                        key={crop.name}
+                        className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 overflow-hidden flex flex-col group"
+                      >
+                        {/* Crop Image Header */}
+                        <div className="relative h-44 w-full overflow-hidden bg-slate-100">
+                          <img
+                            src={cropImg}
+                            alt={crop.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          
+                          {/* Top Badges */}
+                          <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                            <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md shadow-xs ${
+                              crop.season === 'Kharif'
+                                ? 'bg-amber-500/90 text-white'
+                                : crop.season === 'Rabi'
+                                ? 'bg-sky-500/90 text-white'
+                                : crop.season === 'Zaid'
+                                ? 'bg-rose-500/90 text-white'
+                                : 'bg-emerald-600/90 text-white'
+                            }`}>
+                              {crop.season}
+                            </span>
+
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/90 text-slate-700 backdrop-blur-xs font-semibold">
+                              {crop.duration}
+                            </span>
+                          </div>
+
+                          {/* Bottom Crop Name on Image */}
+                          <div className="absolute bottom-3 left-3 right-3 text-white">
+                            <div className="text-lg font-bold leading-tight drop-shadow-xs">
+                              {crop.name}
+                            </div>
                             {crop.localName && (
-                              <span className="text-xs text-stone-400 font-normal">
-                                ({crop.localName})
-                              </span>
+                              <div className="text-xs text-slate-200 font-medium">
+                                {crop.localName}
+                              </div>
                             )}
                           </div>
-                          <div className="text-xs italic text-emerald-400/90 font-mono mt-0.5">
-                            {crop.botanicalName}
+                        </div>
+
+                        {/* Card Body */}
+                        <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                          <div>
+                            <div className="text-xs italic text-emerald-700 font-mono font-medium pb-2 border-b border-slate-100">
+                              {crop.botanicalName}
+                            </div>
+
+                            {/* Agronomy Matrix */}
+                            <div className="mt-3 space-y-2 text-xs">
+                              <div className="flex items-start gap-2 text-slate-700">
+                                <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                                <span className="text-slate-500 font-medium">States:</span>
+                                <span className="text-slate-800 font-semibold">
+                                  {crop.primaryStates.slice(0, 3).join(', ')}
+                                  {crop.primaryStates.length > 3 ? ` +${crop.primaryStates.length - 3}` : ''}
+                                </span>
+                              </div>
+
+                              <div className="flex items-start gap-2 text-slate-700">
+                                <Droplets className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                                <span className="text-slate-500 font-medium">Soil:</span>
+                                <span className="text-slate-700 line-clamp-1" title={crop.soilType}>
+                                  {crop.soilType}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Economic Role & Key Benefit Highlight Box */}
+                            <div className="mt-3.5 p-3 rounded-xl bg-slate-50 border border-slate-150 space-y-1.5 text-xs">
+                              <div className="text-slate-700">
+                                <strong className="text-slate-900 font-semibold">Role: </strong>
+                                <span>{crop.economicRole}</span>
+                              </div>
+                              <div className="text-emerald-800 pt-1.5 border-t border-slate-200/60 font-medium">
+                                <strong className="text-emerald-950 font-semibold">Nutrition/Use: </strong>
+                                <span>{crop.keyNutrientOrUse}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Card Footer Button */}
+                          <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <span className="text-[11px] text-slate-500 font-medium">
+                              ICAR Standard Baseline
+                            </span>
+                            <button
+                              onClick={() => handleFetchRealtimeForCrop(crop.name, activeCategory.name)}
+                              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                            >
+                              <span>Live Intel</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         </div>
-
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ${
-                          crop.season === 'Kharif'
-                            ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                            : crop.season === 'Rabi'
-                            ? 'bg-sky-950 text-sky-300 border border-sky-800'
-                            : crop.season === 'Zaid'
-                            ? 'bg-rose-950 text-rose-300 border border-rose-800'
-                            : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                        }`}>
-                          {crop.season}
-                        </span>
                       </div>
-
-                      {/* Agronomy Matrix */}
-                      <div className="mt-4 space-y-2 text-xs">
-                        <div className="flex items-start gap-2 text-stone-300">
-                          <MapPin className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="text-stone-400">States:</span>
-                          <span className="text-stone-200 font-medium">
-                            {crop.primaryStates.slice(0, 3).join(', ')}
-                            {crop.primaryStates.length > 3 ? ` +${crop.primaryStates.length - 3}` : ''}
-                          </span>
-                        </div>
-
-                        <div className="flex items-start gap-2 text-stone-300">
-                          <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
-                          <span className="text-stone-400">Duration:</span>
-                          <span className="text-stone-200 font-medium">{crop.duration}</span>
-                        </div>
-
-                        <div className="flex items-start gap-2 text-stone-300">
-                          <Sprout className="w-3.5 h-3.5 text-sky-500 shrink-0 mt-0.5" />
-                          <span className="text-stone-400">Soil:</span>
-                          <span className="text-stone-300 line-clamp-1">{crop.soilType}</span>
-                        </div>
-                      </div>
-
-                      {/* Economic & Nutritional Highlight */}
-                      <div className="mt-4 p-3 rounded-lg bg-stone-900/90 border border-stone-800/80 text-[11px] space-y-1.5">
-                        <p className="text-stone-300 line-clamp-2">
-                          <strong className="text-emerald-400">Economic Role:</strong> {crop.economicRole}
-                        </p>
-                        <p className="text-stone-300 line-clamp-2">
-                          <strong className="text-amber-400">Key Benefit/Use:</strong> {crop.keyNutrientOrUse}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Action button */}
-                    <div className="mt-4 pt-3 border-t border-stone-800/80 flex items-center justify-between">
-                      <span className="text-[11px] text-stone-500 font-mono">
-                        Calibrated Indian Standard
-                      </span>
-                      <button
-                        onClick={() => handleFetchRealtimeForCrop(crop.name, activeCategory.name)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors group-hover:translate-x-0.5"
-                      >
-                        <span>Live Intel</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Directory Grid of ALL 10 Categories in Summary Mode */}
-            <div className="mt-12">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-bold font-display text-white">
-                  Complete 10-Class Typology Reference
-                </h4>
-                <span className="text-xs text-stone-400">Click any category above or jump into details</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-                {INDIAN_CROP_TYPES.map((cat, idx) => (
-                  <div
-                    key={cat.id}
-                    onClick={() => setSelectedCategoryIndex(idx)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      selectedCategoryIndex === idx
-                        ? 'bg-emerald-950/60 border-emerald-500'
-                        : 'bg-stone-950/70 border-stone-800 hover:border-stone-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs text-stone-400">
-                      <span className="font-mono text-emerald-400 font-bold">0{cat.categoryNumber}</span>
-                      <span>{cat.crops.length} species</span>
-                    </div>
-                    <div className="font-bold text-sm text-white mt-1">{cat.name}</div>
-                    <div className="text-[11px] text-stone-400 mt-1 line-clamp-2 leading-relaxed">
-                      {cat.crops.map((c) => c.name).join(', ')}
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -570,191 +518,159 @@ export const IndianCropsDirectory: React.FC = () => {
         {/* TAB 2: TYPES ACCORDING TO GROWING SEASON IN INDIA */}
         {activeTab === 'seasons' && (
           <div className="mt-8 space-y-8">
-            <div className="p-6 rounded-2xl bg-stone-950 border border-stone-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                  Agro-Climatic Seasonal Framework
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">
+                  <Sun className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Agro-Climatic Seasonal Framework</span>
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold font-display text-white mt-1">
+                <h3 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 mt-1">
                   Three Major Crop Seasons in India
                 </h3>
-                <p className="text-stone-400 text-xs sm:text-sm mt-1 max-w-2xl">
+                <p className="text-slate-600 text-sm mt-1 max-w-2xl leading-relaxed">
                   Indian agriculture operates across three synchronized astronomical and monsoon-driven cropping windows: Kharif (Monsoon), Rabi (Winter), and Zaid (Summer Catch).
                 </p>
               </div>
 
-              <div className="px-4 py-2 rounded-xl bg-emerald-950/80 border border-emerald-700/80 text-emerald-300 text-xs font-medium flex items-center gap-2">
-                <Clock className="w-4 h-4 text-emerald-400" />
+              <div className="px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
+                <Clock className="w-4 h-4 text-emerald-600" />
                 <span>Current Real-Time Status: <strong>Rabi Sowing Transition Active</strong></span>
               </div>
             </div>
 
             {/* Three Seasons Comparison Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {SEASONS_DATA.map((season) => (
-                <div
-                  key={season.id}
-                  className={`p-6 rounded-2xl border flex flex-col justify-between transition-all ${
-                    season.activeNowInIndia
-                      ? 'bg-gradient-to-b from-stone-950 to-stone-900 border-emerald-500/80 shadow-lg shadow-emerald-950/40 ring-1 ring-emerald-500/40'
-                      : 'bg-stone-950 border-stone-800'
-                  }`}
-                >
-                  <div>
-                    {/* Header with Season Name & Hindi translation */}
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-xs font-mono text-emerald-400 font-bold uppercase">
-                          {season.hindiName}
+              {SEASONS_DATA.map((season) => {
+                const seasonBg = season.id === 'kharif'
+                  ? 'https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?w=600&q=80'
+                  : season.id === 'rabi'
+                  ? 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80'
+                  : 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80';
+
+                return (
+                  <div
+                    key={season.id}
+                    className={`rounded-2xl border bg-white shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between ${
+                      season.activeNowInIndia
+                        ? 'border-emerald-300 ring-2 ring-emerald-500/20'
+                        : 'border-slate-200'
+                    }`}
+                  >
+                    <div>
+                      {/* Image header */}
+                      <div className="relative h-40 w-full overflow-hidden">
+                        <img
+                          src={seasonBg}
+                          alt={season.seasonName}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                        
+                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                          <span className="px-2.5 py-1 rounded-full bg-white/90 text-slate-800 text-xs font-mono font-bold backdrop-blur-xs">
+                            {season.hindiName}
+                          </span>
+
+                          {season.activeNowInIndia ? (
+                            <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                              Active Now
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 rounded-full bg-slate-800/80 text-slate-200 text-[11px] font-medium uppercase tracking-wider">
+                              Upcoming
+                            </span>
+                          )}
                         </div>
-                        <h4 className="text-xl font-bold font-display text-white mt-1">
-                          {season.seasonName}
-                        </h4>
+
+                        <div className="absolute bottom-3 left-3 right-3 text-white">
+                          <h4 className="text-xl font-bold font-display drop-shadow-xs">
+                            {season.seasonName}
+                          </h4>
+                        </div>
                       </div>
 
-                      {season.activeNowInIndia ? (
-                        <span className="px-2.5 py-1 rounded-full bg-emerald-900 text-emerald-300 text-[10px] font-bold uppercase tracking-wider border border-emerald-700 animate-pulse">
-                          Active Now
-                        </span>
-                      ) : (
-                        <span className="px-2.5 py-1 rounded-full bg-stone-900 text-stone-500 text-[10px] font-semibold uppercase tracking-wider border border-stone-800">
-                          Upcoming
-                        </span>
-                      )}
-                    </div>
+                      <div className="p-6 space-y-4">
+                        {/* Sowing & Harvest Timeline Badges */}
+                        <div className="grid grid-cols-2 gap-3 text-xs">
+                          <div className="p-3 rounded-xl bg-slate-50 border border-slate-150">
+                            <span className="text-[10px] uppercase tracking-wider text-slate-500 block font-semibold">
+                              Sown Window
+                            </span>
+                            <span className="text-slate-900 font-bold mt-0.5 block">
+                              {season.sowingPeriod}
+                            </span>
+                          </div>
+                          <div className="p-3 rounded-xl bg-slate-50 border border-slate-150">
+                            <span className="text-[10px] uppercase tracking-wider text-slate-500 block font-semibold">
+                              Harvest Window
+                            </span>
+                            <span className="text-slate-900 font-bold mt-0.5 block">
+                              {season.harvestingPeriod}
+                            </span>
+                          </div>
+                        </div>
 
-                    {/* Sowing & Harvest Timeline Badges */}
-                    <div className="mt-5 grid grid-cols-2 gap-3 text-xs">
-                      <div className="p-3 rounded-xl bg-stone-900/90 border border-stone-800">
-                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block font-semibold">
-                          Sown Window
-                        </span>
-                        <span className="text-stone-100 font-bold mt-0.5 block">
-                          {season.sowingPeriod}
-                        </span>
-                      </div>
-                      <div className="p-3 rounded-xl bg-stone-900/90 border border-stone-800">
-                        <span className="text-[10px] uppercase tracking-wider text-stone-400 block font-semibold">
-                          Harvest Window
-                        </span>
-                        <span className="text-stone-100 font-bold mt-0.5 block">
-                          {season.harvestingPeriod}
-                        </span>
-                      </div>
-                    </div>
+                        {/* Climate Profile */}
+                        <div className="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-100 text-xs space-y-2">
+                          <div>
+                            <span className="text-emerald-900 font-semibold block text-[11px]">Climate Dynamics:</span>
+                            <p className="text-slate-700 mt-0.5 leading-relaxed">{season.climateProfile}</p>
+                          </div>
+                          <div>
+                            <span className="text-emerald-900 font-semibold block text-[11px]">Water / Rainfall:</span>
+                            <p className="text-slate-600 mt-0.5">{season.rainfallPattern}</p>
+                          </div>
+                        </div>
 
-                    {/* Climate Profile */}
-                    <div className="mt-4 p-3.5 rounded-xl bg-stone-900/60 border border-stone-800/80 text-xs space-y-2">
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-[11px]">Climate Dynamics:</span>
-                        <p className="text-stone-200 mt-0.5 leading-relaxed">{season.climateProfile}</p>
-                      </div>
-                      <div>
-                        <span className="text-stone-400 font-semibold block text-[11px]">Water / Rainfall:</span>
-                        <p className="text-stone-300 mt-0.5">{season.rainfallPattern}</p>
-                      </div>
-                    </div>
-
-                    {/* Crop Examples Chips */}
-                    <div className="mt-5">
-                      <span className="text-xs font-semibold text-stone-400 uppercase tracking-wider block mb-2">
-                        Key Flagship Crops:
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {season.keyCrops.map((c) => (
-                          <button
-                            key={c}
-                            onClick={() => handleFetchRealtimeForCrop(c, season.seasonName)}
-                            className="px-2.5 py-1 rounded-lg bg-stone-900 hover:bg-emerald-950 hover:border-emerald-700 border border-stone-800 text-stone-300 hover:text-emerald-300 text-xs transition-all flex items-center gap-1"
-                          >
-                            <span>{c}</span>
-                            <Zap className="w-2.5 h-2.5 text-amber-400" />
-                          </button>
-                        ))}
+                        {/* Crop Examples Chips */}
+                        <div>
+                          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2">
+                            Key Flagship Crops:
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {season.keyCrops.map((c) => (
+                              <button
+                                key={c}
+                                onClick={() => handleFetchRealtimeForCrop(c, season.seasonName)}
+                                className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-lg text-xs font-medium transition-colors flex items-center gap-1 shadow-2xs"
+                              >
+                                <Sprout className="w-3 h-3 text-emerald-600" />
+                                <span>{c}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Current Agronomic Advisory in this season */}
-                    <div className="mt-5 p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-xs">
-                      <span className="text-emerald-400 font-bold flex items-center gap-1.5 mb-1">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Live Field Action Right Now:
-                      </span>
-                      <p className="text-stone-300 leading-relaxed text-[11px]">
-                        {season.agronomicActionNow}
-                      </p>
+                    {/* Footer Advisory */}
+                    <div className="p-4 bg-slate-50 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900">Agronomic Directive: </strong>
+                      {season.agronomicActionNow}
                     </div>
                   </div>
-
-                  <div className="mt-6 pt-4 border-t border-stone-800/80 flex items-center justify-between">
-                    <span className="text-[11px] text-stone-500">
-                      Standard Indian Crop Calendar
-                    </span>
-                    <button
-                      onClick={() => handleFetchRealtimeForCrop(season.keyCrops[0], season.seasonName)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 hover:text-emerald-300"
-                    >
-                      <span>Fetch Live Telemetry</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Seasonal Calendar Summary Matrix */}
-            <div className="p-6 rounded-2xl bg-stone-950 border border-stone-800 overflow-x-auto">
-              <h4 className="text-base font-bold text-white mb-4">
-                National Annual Crop Rotation Cycle & Intercropping Calendar
-              </h4>
-              <div className="min-w-[650px] grid grid-cols-12 gap-2 text-center text-xs font-mono">
-                {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, idx) => (
-                  <div key={m} className="p-2 rounded bg-stone-900 text-stone-300 font-bold border border-stone-800">
-                    {m}
-                  </div>
-                ))}
-
-                {/* Rabi row */}
-                <div className="col-span-4 p-2 rounded bg-sky-950/80 border border-sky-800 text-sky-300 text-[11px] flex items-center justify-center">
-                  Rabi Maturity & Harvest
-                </div>
-                <div className="col-span-6" />
-                <div className="col-span-2 p-2 rounded bg-sky-950/80 border border-sky-800 text-sky-300 text-[11px] flex items-center justify-center">
-                  Rabi Sowing
-                </div>
-
-                {/* Zaid row */}
-                <div className="col-span-2" />
-                <div className="col-span-3 p-2 rounded bg-rose-950/80 border border-rose-800 text-rose-300 text-[11px] flex items-center justify-center">
-                  Zaid (Summer Crops)
-                </div>
-                <div className="col-span-7" />
-
-                {/* Kharif row */}
-                <div className="col-span-5" />
-                <div className="col-span-6 p-2 rounded bg-amber-950/80 border border-amber-800 text-amber-300 text-[11px] flex items-center justify-center">
-                  Kharif (Monsoon Sowing → Vegetative → Harvest)
-                </div>
-                <div className="col-span-1" />
-              </div>
-            </div>
           </div>
         )}
 
         {/* TAB 3: REAL-TIME LIVE INTEL DESK */}
         {activeTab === 'live-desk' && (
           <div className="mt-8 space-y-6">
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-stone-950 via-emerald-950/60 to-stone-950 border border-emerald-800/80">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold uppercase">
-                    <Zap className="w-3.5 h-3.5" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase mb-2">
+                    <Zap className="w-3.5 h-3.5 text-amber-500" />
                     <span>Real-Time Agronomy Telemetry & Market Intelligence</span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold font-display text-white mt-1">
+                  <h3 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 mt-1">
                     Direct Gemini API Live Crop Status
                   </h3>
-                  <p className="text-stone-300 text-xs sm:text-sm mt-1 max-w-2xl">
+                  <p className="text-slate-600 text-sm mt-1 max-w-2xl leading-relaxed">
                     Input any Indian crop name or select from our curated index below to fetch live October 2026 growth stages, APMC Mandi price trends, pest warnings, and precision nutrient schedules.
                   </p>
                 </div>
@@ -763,7 +679,7 @@ export const IndianCropsDirectory: React.FC = () => {
                   <button
                     onClick={() => handleFetchRealtimeForCrop('Wheat', 'Food Crops')}
                     disabled={isFetchingRealtime}
-                    className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm"
+                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition-all"
                   >
                     {isFetchingRealtime ? (
                       <>
@@ -781,8 +697,8 @@ export const IndianCropsDirectory: React.FC = () => {
               </div>
 
               {/* Instant Quick-Select Buttons */}
-              <div className="mt-6 pt-5 border-t border-stone-800/80">
-                <span className="text-xs text-stone-400 uppercase tracking-wider font-semibold block mb-2.5">
+              <div className="mt-6 pt-5 border-t border-slate-100">
+                <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold block mb-2.5">
                   Click to inspect live verified telemetry:
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -803,13 +719,13 @@ export const IndianCropsDirectory: React.FC = () => {
                     <button
                       key={c}
                       onClick={() => handleFetchRealtimeForCrop(c, 'National Index')}
-                      className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
+                      className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all flex items-center gap-1.5 ${
                         inspectingCropName === c
-                          ? 'bg-emerald-900 border-emerald-500 text-white'
-                          : 'bg-stone-900/90 border-stone-800 text-stone-300 hover:border-emerald-600 hover:text-white'
+                          ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
+                          : 'bg-white border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-900 shadow-2xs'
                       }`}
                     >
-                      <Zap className="w-3 h-3 text-amber-400" />
+                      <Zap className="w-3 h-3 text-amber-500" />
                       <span>{c}</span>
                     </button>
                   ))}
@@ -819,18 +735,18 @@ export const IndianCropsDirectory: React.FC = () => {
 
             {/* Live Intelligence Feed Display Card */}
             {liveReport && (
-              <div className="p-6 sm:p-8 rounded-2xl bg-stone-950 border border-emerald-600/70 shadow-2xl relative overflow-hidden">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-800">
+              <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xl relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-150">
                   <div>
-                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold">
-                      <Sparkles className="w-4 h-4 text-emerald-400" />
-                      <span>GEMINI 3.8 FLASH LIVE FEED · {liveReport.lastUpdated}</span>
+                    <div className="flex items-center gap-2 text-xs font-mono text-emerald-700 font-bold">
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
+                      <span>GEMINI AGRI-ENGINE LIVE FEED · {liveReport.lastUpdated}</span>
                     </div>
-                    <h4 className="text-2xl sm:text-3xl font-bold font-display text-white mt-1">
+                    <h4 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 mt-1">
                       {liveReport.name}
                     </h4>
                     {liveReport.botanicalName && (
-                      <p className="text-xs italic font-mono text-stone-400 mt-0.5">
+                      <p className="text-xs italic font-mono text-slate-500 mt-0.5">
                         {liveReport.botanicalName}
                       </p>
                     )}
@@ -839,20 +755,20 @@ export const IndianCropsDirectory: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleToggleSpeech}
-                      className={`px-3 py-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                      className={`px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                         isSpeaking
-                          ? 'bg-rose-950 border-rose-700 text-rose-300'
-                          : 'bg-stone-900 border-stone-700 text-stone-200 hover:bg-stone-800'
+                          ? 'bg-rose-50 border-rose-200 text-rose-700'
+                          : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-xs'
                       }`}
                     >
-                      {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                      {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-emerald-600" />}
                       <span>{isSpeaking ? 'Stop Audio' : 'Audio Brief'}</span>
                     </button>
 
                     <button
                       onClick={() => handleFetchRealtimeForCrop(inspectingCropName)}
                       disabled={isFetchingRealtime}
-                      className="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm"
+                      className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 ${isFetchingRealtime ? 'animate-spin' : ''}`} />
                       <span>Sync</span>
@@ -863,29 +779,29 @@ export const IndianCropsDirectory: React.FC = () => {
                 {/* Live Real-Time Telemetry Metrics */}
                 {liveReport.liveAlert && (
                   <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 rounded-xl bg-stone-900/90 border border-stone-800">
-                      <span className="text-[10px] uppercase tracking-wider font-semibold text-emerald-400 block mb-1">
+                    <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100">
+                      <span className="text-[10px] uppercase tracking-wider font-semibold text-emerald-800 block mb-1">
                         Active Growth Stage in India
                       </span>
-                      <p className="text-sm font-bold text-white">
+                      <p className="text-sm font-bold text-slate-900">
                         {liveReport.liveAlert.currentStage}
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-stone-900/90 border border-stone-800">
-                      <span className="text-[10px] uppercase tracking-wider font-semibold text-amber-400 block mb-1">
+                    <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-100">
+                      <span className="text-[10px] uppercase tracking-wider font-semibold text-amber-800 block mb-1">
                         Mandi Price / Demand Trend
                       </span>
-                      <p className="text-sm font-bold text-stone-100">
+                      <p className="text-sm font-bold text-slate-900">
                         {liveReport.liveAlert.mandiPriceTrend}
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-stone-900/90 border border-stone-800">
-                      <span className="text-[10px] uppercase tracking-wider font-semibold text-sky-400 block mb-1">
+                    <div className="p-4 rounded-xl bg-sky-50/70 border border-sky-100">
+                      <span className="text-[10px] uppercase tracking-wider font-semibold text-sky-800 block mb-1">
                         Seasonal Agro-Meteorology
                       </span>
-                      <p className="text-xs text-stone-300">
+                      <p className="text-xs text-slate-700 leading-relaxed">
                         {liveReport.liveAlert.weatherAlert}
                       </p>
                     </div>
@@ -894,13 +810,13 @@ export const IndianCropsDirectory: React.FC = () => {
 
                 {/* Senior Agronomist Field Tip */}
                 {liveReport.liveAlert?.agronomistTip && (
-                  <div className="mt-4 p-4 rounded-xl bg-emerald-950/40 border border-emerald-700/60 flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                  <div className="mt-4 p-4 rounded-xl bg-emerald-100/60 border border-emerald-200 flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                      <span className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
                         Senior Agronomist Field Advisory (October Sowing/Harvest Window):
                       </span>
-                      <p className="text-xs sm:text-sm text-stone-200 mt-1 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-slate-800 mt-1 leading-relaxed">
                         {liveReport.liveAlert.agronomistTip}
                       </p>
                     </div>
@@ -909,26 +825,26 @@ export const IndianCropsDirectory: React.FC = () => {
 
                 {/* Cultivation Matrix */}
                 <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div className="p-3.5 rounded-xl bg-stone-900 border border-stone-800">
-                    <span className="text-[11px] text-stone-400 block font-medium">Optimal Soil</span>
-                    <span className="text-stone-100 font-semibold mt-1 block">{liveReport.idealSoil}</span>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span className="text-[11px] text-slate-500 block font-medium">Optimal Soil</span>
+                    <span className="text-slate-900 font-semibold mt-1 block">{liveReport.idealSoil}</span>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-stone-900 border border-stone-800">
-                    <span className="text-[11px] text-stone-400 block font-medium">Optimal Temperature</span>
-                    <span className="text-stone-100 font-semibold mt-1 block">{liveReport.temperature}</span>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span className="text-[11px] text-slate-500 block font-medium">Optimal Temperature</span>
+                    <span className="text-slate-900 font-semibold mt-1 block">{liveReport.temperature}</span>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-stone-900 border border-stone-800">
-                    <span className="text-[11px] text-stone-400 block font-medium">Watering / Irrigation</span>
-                    <span className="text-stone-100 font-semibold mt-1 block">{liveReport.rainfall}</span>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span className="text-[11px] text-slate-500 block font-medium">Watering / Irrigation</span>
+                    <span className="text-slate-900 font-semibold mt-1 block">{liveReport.rainfall}</span>
                   </div>
-                  <div className="p-3.5 rounded-xl bg-stone-900 border border-stone-800">
-                    <span className="text-[11px] text-stone-400 block font-medium">Field Duration</span>
-                    <span className="text-stone-100 font-semibold mt-1 block">{liveReport.durationDays}</span>
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span className="text-[11px] text-slate-500 block font-medium">Field Duration</span>
+                    <span className="text-slate-900 font-semibold mt-1 block">{liveReport.durationDays}</span>
                   </div>
                 </div>
 
                 {/* Summary */}
-                <div className="mt-6 text-xs sm:text-sm text-stone-300 leading-relaxed bg-stone-900/60 p-4 rounded-xl border border-stone-800">
+                <div className="mt-6 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {liveReport.summary}
                 </div>
               </div>
@@ -940,8 +856,8 @@ export const IndianCropsDirectory: React.FC = () => {
 
       {/* POPUP MODAL FOR ANY CROP INSPECTION */}
       {inspectCropModal && (
-        <div className="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-stone-900 border border-stone-700 w-full max-w-2xl rounded-2xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 w-full max-w-2xl rounded-2xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => {
                 setInspectCropModal(false);
@@ -950,82 +866,82 @@ export const IndianCropsDirectory: React.FC = () => {
                   setIsSpeaking(false);
                 }
               }}
-              className="absolute right-4 top-4 p-2 text-stone-400 hover:text-white rounded-lg hover:bg-stone-800"
+              className="absolute right-4 top-4 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
             >
               ✕
             </button>
 
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono font-bold">
-              <Zap className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-emerald-700 text-xs font-mono font-bold">
+              <Zap className="w-4 h-4 text-amber-500" />
               <span>LIVE REAL-TIME CROP INTELLIGENCE</span>
             </div>
 
-            <h3 className="text-2xl font-bold font-display text-white mt-1">
+            <h3 className="text-2xl font-bold font-display text-slate-900 mt-1">
               {inspectingCropName}
             </h3>
 
             {isFetchingRealtime ? (
               <div className="py-16 text-center space-y-3">
-                <Loader2 className="w-8 h-8 text-emerald-400 animate-spin mx-auto" />
-                <p className="text-stone-300 text-sm">
+                <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mx-auto" />
+                <p className="text-slate-700 text-sm font-medium">
                   Connecting to Gemini Agronomy Engine for live {inspectingCropName} telemetrics...
                 </p>
-                <p className="text-stone-500 text-xs font-mono">
+                <p className="text-slate-500 text-xs font-mono">
                   Synthesizing agro-meteorology, APMC mandi trends, and growth stages...
                 </p>
               </div>
             ) : liveReport ? (
               <div className="mt-6 space-y-5">
-                {liveReport.liveAlert && (
-                  <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800 space-y-2">
+                {liveReport?.liveAlert && (
+                  <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-emerald-400 uppercase tracking-wide">
+                      <span className="font-bold text-emerald-900 uppercase tracking-wide">
                         Current Growth Stage
                       </span>
-                      <span className="font-mono text-stone-400">{liveReport.lastUpdated}</span>
+                      <span className="font-mono text-slate-500">{liveReport?.lastUpdated}</span>
                     </div>
-                    <div className="text-base font-bold text-white">
-                      {liveReport.liveAlert.currentStage}
+                    <div className="text-base font-bold text-slate-900">
+                      {liveReport.liveAlert?.currentStage}
                     </div>
-                    <p className="text-xs text-stone-300">
-                      <strong>Mandi Price Trend:</strong> {liveReport.liveAlert.mandiPriceTrend}
+                    <p className="text-xs text-slate-700">
+                      <strong className="text-slate-900">Mandi Price Trend:</strong> {liveReport.liveAlert?.mandiPriceTrend}
                     </p>
-                    <p className="text-xs text-stone-300">
-                      <strong>Weather Advisory:</strong> {liveReport.liveAlert.weatherAlert}
+                    <p className="text-xs text-slate-700">
+                      <strong className="text-slate-900">Weather Advisory:</strong> {liveReport.liveAlert?.weatherAlert}
                     </p>
-                    <p className="text-xs text-emerald-200 mt-2 bg-emerald-900/40 p-2.5 rounded-lg border border-emerald-800/80">
-                      <strong>Agronomist Tip:</strong> {liveReport.liveAlert.agronomistTip}
+                    <p className="text-xs text-emerald-900 mt-2 bg-emerald-100/70 p-2.5 rounded-lg border border-emerald-200">
+                      <strong className="text-emerald-950">Agronomist Tip:</strong> {liveReport.liveAlert?.agronomistTip}
                     </p>
                   </div>
                 )}
 
-                <div className="text-xs sm:text-sm text-stone-300 leading-relaxed">
-                  {liveReport.summary}
+                <div className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
+                  {liveReport?.summary}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-stone-950 rounded-xl border border-stone-800">
-                    <span className="text-stone-400 block font-medium">Soil Requirement:</span>
-                    <span className="text-white font-semibold mt-0.5 block">{liveReport.idealSoil}</span>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block font-medium">Soil Requirement:</span>
+                    <span className="text-slate-900 font-semibold mt-0.5 block">{liveReport?.idealSoil}</span>
                   </div>
-                  <div className="p-3 bg-stone-950 rounded-xl border border-stone-800">
-                    <span className="text-stone-400 block font-medium">Temperature:</span>
-                    <span className="text-white font-semibold mt-0.5 block">{liveReport.temperature}</span>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span className="text-slate-500 block font-medium">Temperature:</span>
+                    <span className="text-slate-900 font-semibold mt-0.5 block">{liveReport?.temperature}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-stone-800">
+                <div className="flex items-center justify-between pt-4 border-t border-slate-200">
                   <button
                     onClick={handleToggleSpeech}
-                    className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-xs font-semibold text-white flex items-center gap-2"
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-800 flex items-center gap-2 transition-colors"
                   >
-                    {isSpeaking ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+                    {isSpeaking ? <VolumeX className="w-4 h-4 text-rose-600" /> : <Volume2 className="w-4 h-4 text-emerald-600" />}
                     <span>{isSpeaking ? 'Stop Audio' : 'Listen to Agronomy Brief'}</span>
                   </button>
 
                   <button
                     onClick={() => handleFetchRealtimeForCrop(inspectingCropName)}
-                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
                     <span>Re-fetch Real-Time</span>

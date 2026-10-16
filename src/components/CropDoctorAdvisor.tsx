@@ -11,8 +11,10 @@ import {
   Clock,
   Printer,
   Copy,
-  Check
+  Check,
+  Sprout
 } from 'lucide-react';
+import { getCropImage } from '../data/cropImages';
 
 interface DiagnosticCase {
   id: string;
@@ -173,6 +175,7 @@ export const CropDoctorAdvisor: React.FC = () => {
   const [copiedText, setCopiedText] = useState<boolean>(false);
 
   const activeCase = DIAGNOSTIC_CASES.find((c) => c.id === selectedCaseId) || DIAGNOSTIC_CASES[0];
+  const caseImg = getCropImage(activeCase.crop);
 
   const handleCopyRecipe = () => {
     const text = `Farmesy Crop Prescription:\nCrop: ${activeCase.crop}\nIssue: ${activeCase.issueName}\n\n100% Organic Protocol:\nRecipe: ${activeCase.naturalSolution.recipeName}\nIngredients: ${activeCase.naturalSolution.ingredients}\nApplication: ${activeCase.naturalSolution.application}\n\nChemical Protocol:\nCompound: ${activeCase.chemicalSolution.commercialCompound}\nDosage: ${activeCase.chemicalSolution.dosagePer15L}\nSafety Pre-Harvest Interval: ${activeCase.chemicalSolution.phiDays} days\n\nSoil Rehab: ${activeCase.soilRehabilitation}`;
@@ -182,33 +185,34 @@ export const CropDoctorAdvisor: React.FC = () => {
   };
 
   return (
-    <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-stone-950 border border-stone-800 shadow-xl">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-800">
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 overflow-hidden">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-150">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-            <FlaskConical className="w-4 h-4 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-2">
+            <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />
             <span>Precision Crop Doctor & Field Diagnosis</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-display text-white mt-1">
+          <h3 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 mt-1">
             Real-Time Crop Symptom & Treatment Matrix
           </h3>
-          <p className="text-stone-400 text-xs sm:text-sm mt-1">
+          <p className="text-slate-600 text-sm mt-1 max-w-2xl leading-relaxed">
             Diagnose common pest and pathogen threats, evaluate natural biological remedies versus synthetic chemical knockdowns, and preserve long-term soil ecology.
           </p>
         </div>
 
         <button
           onClick={handleCopyRecipe}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-semibold rounded-lg transition-colors self-start md:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 text-slate-700 text-xs font-semibold rounded-xl transition-all self-start md:self-auto shadow-2xs hover:shadow-xs"
         >
           {copiedText ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <Check className="w-4 h-4 text-emerald-600" />
               <span>Prescription Copied!</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5 text-amber-400" />
+              <Copy className="w-4 h-4 text-slate-500" />
               <span>Copy Treatment Card</span>
             </>
           )}
@@ -216,152 +220,160 @@ export const CropDoctorAdvisor: React.FC = () => {
       </div>
 
       {/* Case Selector Tabs */}
-      <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-        {DIAGNOSTIC_CASES.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setSelectedCaseId(item.id)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 ${
-              selectedCaseId === item.id
-                ? 'bg-emerald-950 border-emerald-500 text-white shadow-sm ring-1 ring-emerald-500/50'
-                : 'bg-stone-900/60 border-stone-800 text-stone-400 hover:border-stone-700 hover:text-stone-200'
-            }`}
-          >
-            <span>{item.crop.split(' ')[0]}</span>
-            <span className="text-[10px] text-stone-500">·</span>
-            <span className="text-stone-300 font-normal">{item.issueName.split(' ')[0]} {item.issueName.split(' ')[1] || ''}</span>
-          </button>
-        ))}
+      <div className="mt-8 flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+        {DIAGNOSTIC_CASES.map((item) => {
+          const isSelected = selectedCaseId === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setSelectedCaseId(item.id)}
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 ${
+                isSelected
+                  ? 'bg-emerald-600 border-emerald-600 text-white shadow-md ring-2 ring-emerald-500/30'
+                  : 'bg-white border-slate-200 text-slate-700 hover:border-emerald-300 hover:bg-emerald-50/50 hover:text-emerald-900 shadow-2xs'
+              }`}
+            >
+              <span className="font-bold">{item.crop.split(' ')[0]}</span>
+              <span className={`text-[10px] ${isSelected ? 'text-emerald-100' : 'text-slate-400'}`}>·</span>
+              <span className={`${isSelected ? 'text-emerald-50' : 'text-slate-600'}`}>{item.issueName.split(' ')[0]} {item.issueName.split(' ')[1] || ''}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Active Diagnostic Detail */}
-      <div className="mt-6 p-6 rounded-2xl bg-stone-900/60 border border-stone-800 space-y-6">
-        
-        {/* Symptom Header */}
-        <div className="p-4 rounded-xl bg-stone-950 border border-stone-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-emerald-400 font-bold uppercase">{activeCase.crop}</span>
-              <span className="text-stone-600">·</span>
-              <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                activeCase.severity === 'Severe'
-                  ? 'bg-rose-950 text-rose-300 border border-rose-800'
-                  : 'bg-amber-950 text-amber-300 border border-amber-800'
-              }`}>
-                {activeCase.severity} Threat Level
-              </span>
-            </div>
-            <h4 className="text-xl font-bold font-display text-white mt-1">{activeCase.issueName}</h4>
-            <p className="text-stone-300 text-xs mt-1 leading-relaxed max-w-3xl">
+      <div className="mt-8 rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+        {/* Symptom Banner with Crop Photo */}
+        <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-100">
+          <img
+            src={caseImg}
+            alt={activeCase.issueName}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+            <span className="px-3 py-1 rounded-full bg-white/90 text-slate-800 text-xs font-bold backdrop-blur-xs shadow-xs">
+              {activeCase.crop}
+            </span>
+
+            <span className={`text-xs font-bold uppercase px-3 py-1 rounded-full backdrop-blur-xs shadow-xs ${
+              activeCase.severity === 'Critical'
+                ? 'bg-rose-500 text-white'
+                : 'bg-amber-500 text-white'
+            }`}>
+              {activeCase.severity} Threat Level
+            </span>
+          </div>
+
+          <div className="absolute bottom-4 left-4 right-4 text-white">
+            <h4 className="text-2xl sm:text-3xl font-bold font-display drop-shadow-xs">
+              {activeCase.issueName}
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-200 mt-1 max-w-3xl leading-relaxed drop-shadow-2xs">
               {activeCase.symptomDescription}
             </p>
           </div>
         </div>
 
-        {/* Dual Prescription: Natural vs Chemical */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          {/* Natural Solution Card */}
-          <div className="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-600/50 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-emerald-800/60">
-              <div className="flex items-center gap-2">
-                <Leaf className="w-4 h-4 text-emerald-400" />
-                <span className="font-bold text-sm text-emerald-300">100% Organic Bio-Protocol</span>
+        <div className="p-6 sm:p-8 space-y-6">
+          {/* Dual Prescription: Natural vs Chemical */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            {/* Natural Solution Card */}
+            <div className="p-6 rounded-2xl bg-emerald-50/70 border border-emerald-200 shadow-xs space-y-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-3 border-b border-emerald-200">
+                  <div className="flex items-center gap-2">
+                    <Leaf className="w-5 h-5 text-emerald-600" />
+                    <span className="font-bold text-sm text-emerald-950">100% Organic Bio-Protocol</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-emerald-800 bg-white px-2.5 py-1 rounded-lg border border-emerald-200 shadow-2xs">
+                    {activeCase.naturalSolution.costPerAcre} / acre
+                  </span>
+                </div>
+
+                <div className="mt-4 space-y-3 text-xs">
+                  <div>
+                    <strong className="text-emerald-900 block text-[11px] uppercase tracking-wide">Recipe / Bio-Extract:</strong>
+                    <p className="text-slate-800 font-semibold mt-0.5">{activeCase.naturalSolution.recipeName}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-emerald-900 block text-[11px] uppercase tracking-wide">Ingredients Formulation:</strong>
+                    <p className="text-slate-700 mt-0.5 leading-relaxed">{activeCase.naturalSolution.ingredients}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-emerald-900 block text-[11px] uppercase tracking-wide">Application Timing:</strong>
+                    <p className="text-slate-700 mt-0.5">{activeCase.naturalSolution.application}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-emerald-900 block text-[11px] uppercase tracking-wide">Biological Mechanism:</strong>
+                    <p className="text-slate-600 mt-0.5 leading-relaxed">{activeCase.naturalSolution.mechanism}</p>
+                  </div>
+                </div>
               </div>
-              <span className="text-xs font-mono text-emerald-400 font-bold">
-                Cost: {activeCase.naturalSolution.costPerAcre} / acre
-              </span>
+
+              <div className="p-3 bg-white rounded-xl border border-emerald-200 text-xs text-emerald-900 font-medium flex items-center gap-2 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{activeCase.naturalSolution.advantage}</span>
+              </div>
             </div>
 
-            <div className="space-y-2 text-xs">
+            {/* Chemical Knockdown Card */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs space-y-4 flex flex-col justify-between">
               <div>
-                <strong className="text-emerald-300 block text-[11px] uppercase">Recipe / Bio-Extract:</strong>
-                <p className="text-white font-medium mt-0.5">{activeCase.naturalSolution.recipeName}</p>
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                  <div className="flex items-center gap-2">
+                    <FlaskConical className="w-5 h-5 text-slate-700" />
+                    <span className="font-bold text-sm text-slate-900">Synthetic Chemical Knockdown</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-slate-800 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                    {activeCase.chemicalSolution.costPerAcre} / acre
+                  </span>
+                </div>
+
+                <div className="mt-4 space-y-3 text-xs">
+                  <div>
+                    <strong className="text-slate-900 block text-[11px] uppercase tracking-wide">Commercial Compound:</strong>
+                    <p className="text-slate-800 font-semibold mt-0.5">{activeCase.chemicalSolution.commercialCompound}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-slate-900 block text-[11px] uppercase tracking-wide">Active Ingredient & Dosage:</strong>
+                    <p className="text-slate-700 mt-0.5">{activeCase.chemicalSolution.activeIngredient} · {activeCase.chemicalSolution.dosagePer15L}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-slate-900 block text-[11px] uppercase tracking-wide">Application Regime:</strong>
+                    <p className="text-slate-700 mt-0.5">{activeCase.chemicalSolution.application}</p>
+                  </div>
+
+                  <div>
+                    <strong className="text-slate-900 block text-[11px] uppercase tracking-wide">Pre-Harvest Interval (PHI):</strong>
+                    <p className="text-slate-700 mt-0.5">{activeCase.chemicalSolution.phiDays} mandatory withdrawal days before consumption</p>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <strong className="text-stone-400 block text-[11px] uppercase">Ingredients & Ratio:</strong>
-                <p className="text-stone-300 mt-0.5 leading-relaxed">{activeCase.naturalSolution.ingredients}</p>
+              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 font-medium flex items-center gap-2 shadow-2xs">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>{activeCase.chemicalSolution.warning}</span>
               </div>
-
-              <div>
-                <strong className="text-stone-400 block text-[11px] uppercase">Application Protocol:</strong>
-                <p className="text-stone-300 mt-0.5 leading-relaxed">{activeCase.naturalSolution.application}</p>
-              </div>
-
-              <div>
-                <strong className="text-stone-400 block text-[11px] uppercase">Biological Mechanism:</strong>
-                <p className="text-stone-300 mt-0.5 leading-relaxed">{activeCase.naturalSolution.mechanism}</p>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-700/60 text-xs flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-              <p className="text-emerald-200 text-[11px] leading-relaxed">
-                <strong className="text-emerald-300">Key Advantage:</strong> {activeCase.naturalSolution.advantage}
-              </p>
             </div>
           </div>
 
-          {/* Chemical Solution Card */}
-          <div className="p-5 rounded-2xl bg-stone-950/90 border border-stone-800 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-              <div className="flex items-center gap-2">
-                <FlaskConical className="w-4 h-4 text-amber-400" />
-                <span className="font-bold text-sm text-amber-300">Chemical Intervention (Emergency)</span>
-              </div>
-              <span className="text-xs font-mono text-amber-400 font-bold">
-                Cost: {activeCase.chemicalSolution.costPerAcre} / acre
-              </span>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <div>
-                <strong className="text-amber-300 block text-[11px] uppercase">Commercial Compound:</strong>
-                <p className="text-white font-medium mt-0.5">{activeCase.chemicalSolution.commercialCompound}</p>
-              </div>
-
-              <div>
-                <strong className="text-stone-400 block text-[11px] uppercase">Active Ingredient:</strong>
-                <p className="text-stone-300 font-mono mt-0.5">{activeCase.chemicalSolution.activeIngredient}</p>
-              </div>
-
-              <div>
-                <strong className="text-stone-400 block text-[11px] uppercase">Knapsack Spray Dosage:</strong>
-                <p className="text-stone-200 font-bold mt-0.5">{activeCase.chemicalSolution.dosagePer15L}</p>
-              </div>
-
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-stone-900 border border-stone-800">
-                <Clock className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-stone-400">Pre-Harvest Interval (PHI):</span>
-                <span className="text-amber-300 font-bold font-mono">
-                  {activeCase.chemicalSolution.phiDays} Days Mandatory Wait
-                </span>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-800/60 text-xs flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-              <p className="text-amber-200 text-[11px] leading-relaxed">
-                <strong className="text-amber-300">Safety Warning:</strong> {activeCase.chemicalSolution.warning}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Long-Term Soil Recovery Recommendation */}
-        <div className="p-4 rounded-xl bg-stone-950 border border-stone-800 text-xs flex items-start gap-3">
-          <Sparkles className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-          <div>
-            <strong className="text-emerald-300 uppercase tracking-wider block text-[11px]">
-              Post-Infestation Soil Rehabilitation Protocol:
-            </strong>
-            <p className="text-stone-300 mt-1 leading-relaxed">
-              {activeCase.soilRehabilitation}
-            </p>
+          {/* Soil Rehabilitation Strategy */}
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50 via-emerald-50/60 to-teal-50 border border-emerald-200 text-xs shadow-2xs">
+            <span className="font-bold text-emerald-950 uppercase tracking-wider flex items-center gap-2 mb-1 text-sm">
+              <Sprout className="w-4 h-4 text-emerald-600" />
+              Long-Term Soil Rehabilitation Directive:
+            </span>
+            <p className="text-slate-700 leading-relaxed text-xs sm:text-sm">{activeCase.soilRehabilitation}</p>
           </div>
         </div>
-
       </div>
     </div>
   );

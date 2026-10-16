@@ -11,8 +11,10 @@ import {
   ShieldCheck,
   Wheat,
   Sprout,
-  DollarSign
+  DollarSign,
+  ChevronRight
 } from 'lucide-react';
+import { getCropImage } from '../data/cropImages';
 
 interface CropComparisonMetric {
   id: string;
@@ -98,55 +100,37 @@ const COMPARISON_INDEX: Record<string, CropComparisonMetric> = {
     waterLevel: 'Very Low',
     soilImpact: 'Enriches Soil (N-Fixer)',
     laborNeed: 'Low',
-    estGrossRevenue: '$580 – $750 / acre',
-    estCostPerAcre: '$190 – $240 / acre',
-    estNetProfitPerAcre: '$390 – $510 / acre',
-    proteinContent: '21.5% High Protein',
-    climateTolerance: 'High drought resilience; cannot tolerate waterlogging or frost',
-    bestSuitedFor: 'Residual moisture farming, rainfed belts, zero synthetic nitrogen',
-    keyRisk: 'Root rot in poorly drained soils; pod borer larvae during pod setting'
+    estGrossRevenue: '$580 – $740 / acre',
+    estCostPerAcre: '$160 – $220 / acre',
+    estNetProfitPerAcre: '$420 – $520 / acre',
+    proteinContent: '22% Complete Plant Protein',
+    climateTolerance: 'High drought hardiness, sensitive to excess standing water and heavy frost',
+    bestSuitedFor: 'Conserves residual moisture; ideal pulse rotation after Kharif paddy',
+    keyRisk: 'Pod borer (Helicoverpa armigera) and collar rot in waterlogged patches'
   },
   cotton: {
     id: 'cotton',
     name: 'Cotton (White Gold)',
-    category: 'Fibre & Cash Crop',
+    category: 'Fibre Crop',
     season: 'Kharif (Monsoon)',
     durationDays: 165,
     waterDemandMm: 750,
     waterLevel: 'Moderate',
     soilImpact: 'Heavy Nutrient Depleter',
     laborNeed: 'High',
-    estGrossRevenue: '$900 – $1,350 / acre',
-    estCostPerAcre: '$420 – $560 / acre',
-    estNetProfitPerAcre: '$480 – $790 / acre',
-    proteinContent: '40% in cottonseed meal',
-    climateTolerance: 'Deep-rooted, heat-loving; requires bright sunny picking weather',
-    bestSuitedFor: 'Deep black cotton clay soils with drip or furrow irrigation',
-    keyRisk: 'Pink bollworm, sucking pests (whitefly), unseasonal rain during boll burst'
+    estGrossRevenue: '$850 – $1,250 / acre',
+    estCostPerAcre: '$420 – $550 / acre',
+    estNetProfitPerAcre: '$430 – $700 / acre',
+    proteinContent: 'N/A (Lint & 18% oil in cottonseed)',
+    climateTolerance: 'Requires long frost-free periods, high sunshine, deep black soils',
+    bestSuitedFor: 'Deccan black soils with drip irrigation or assured seasonal rainfall',
+    keyRisk: 'Pink bollworm resistance and excessive pesticide expenditure'
   },
-  sugarcane: {
-    id: 'sugarcane',
-    name: 'Sugarcane (Commercial Cane)',
-    category: 'Cash Crop',
-    season: 'Perennial / Annual',
-    durationDays: 360,
-    waterDemandMm: 1800,
-    waterLevel: 'Very High',
-    soilImpact: 'Heavy Nutrient Depleter',
-    laborNeed: 'High',
-    estGrossRevenue: '$1,800 – $2,400 / acre',
-    estCostPerAcre: '$850 – $1,100 / acre',
-    estNetProfitPerAcre: '$950 – $1,300 / acre',
-    proteinContent: 'Negligible (Pure Sucrose)',
-    climateTolerance: 'Tropical heat and heavy sunlight; sensitive to severe freezing',
-    bestSuitedFor: 'Deep alluvial loams near cooperative sugar mills and continuous water',
-    keyRisk: 'Year-long capital lock-in; extreme water dependency and mill payment cycles'
-  },
-  napier: {
-    id: 'napier',
+  superNapier: {
+    id: 'superNapier',
     name: 'Super Napier Grass',
     category: 'Fodder Crop',
-    season: 'Perennial Multi-Cut',
+    season: 'Perennial / Multi-Cut',
     durationDays: 45, // per cut
     waterDemandMm: 650,
     waterLevel: 'Moderate',
@@ -187,18 +171,22 @@ export const CropComparisonStudio: React.FC = () => {
   const cropA = COMPARISON_INDEX[cropAId] || COMPARISON_INDEX.wheat;
   const cropB = COMPARISON_INDEX[cropBId] || COMPARISON_INDEX.mustard;
 
+  const cropAImg = getCropImage(cropA.name);
+  const cropBImg = getCropImage(cropB.name);
+
   return (
-    <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-stone-950 border border-stone-800 shadow-xl">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-800">
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-10 overflow-hidden">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-150">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-            <Scale className="w-4 h-4 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-2">
+            <Scale className="w-3.5 h-3.5 text-emerald-600" />
             <span>Interactive Crop Comparison Studio</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold font-display text-white mt-1">
+          <h3 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 mt-1">
             Compare Any Two Indian Crops Side-by-Side
           </h3>
-          <p className="text-stone-400 text-xs sm:text-sm mt-1">
+          <p className="text-slate-600 text-sm mt-1 max-w-2xl leading-relaxed">
             Evaluate water footprints, growth duration, soil regeneration capability, and net operating margins per acre to make informed agronomic decisions.
           </p>
         </div>
@@ -210,24 +198,24 @@ export const CropComparisonStudio: React.FC = () => {
             setCropAId(cropBId);
             setCropBId(temp);
           }}
-          className="inline-flex items-center gap-1.5 px-3 py-2 bg-stone-900 hover:bg-stone-800 border border-stone-700 text-stone-200 text-xs font-semibold rounded-lg transition-colors self-start md:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 text-slate-700 text-xs font-semibold rounded-xl transition-all self-start md:self-auto shadow-2xs hover:shadow-xs"
         >
-          <ArrowRightLeft className="w-3.5 h-3.5 text-amber-400" />
+          <ArrowRightLeft className="w-3.5 h-3.5 text-emerald-600" />
           <span>Swap Crops</span>
         </button>
       </div>
 
       {/* Selectors Bar */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Crop A Selector */}
-        <div className="p-4 rounded-xl bg-stone-900/90 border border-emerald-800/60">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-2">
+        <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 shadow-xs">
+          <label className="block text-xs font-bold uppercase tracking-wider text-emerald-900 mb-2">
             Select First Crop (Crop A)
           </label>
           <select
             value={cropAId}
             onChange={(e) => setCropAId(e.target.value)}
-            className="w-full px-3 py-2 bg-stone-950 border border-stone-700 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-emerald-500"
+            className="w-full px-3.5 py-2.5 bg-white border border-emerald-300 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-2xs"
           >
             {Object.values(COMPARISON_INDEX).map((c) => (
               <option key={c.id} value={c.id} disabled={c.id === cropBId}>
@@ -238,14 +226,14 @@ export const CropComparisonStudio: React.FC = () => {
         </div>
 
         {/* Crop B Selector */}
-        <div className="p-4 rounded-xl bg-stone-900/90 border border-amber-800/60">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
+        <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 shadow-xs">
+          <label className="block text-xs font-bold uppercase tracking-wider text-amber-900 mb-2">
             Select Second Crop (Crop B)
           </label>
           <select
             value={cropBId}
             onChange={(e) => setCropBId(e.target.value)}
-            className="w-full px-3 py-2 bg-stone-950 border border-stone-700 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-amber-500"
+            className="w-full px-3.5 py-2.5 bg-white border border-amber-300 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-2xs"
           >
             {Object.values(COMPARISON_INDEX).map((c) => (
               <option key={c.id} value={c.id} disabled={c.id === cropAId}>
@@ -257,155 +245,191 @@ export const CropComparisonStudio: React.FC = () => {
       </div>
 
       {/* Side-by-Side Comparison Matrix */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Crop A Card */}
-        <div className="p-6 rounded-2xl bg-stone-900/60 border border-stone-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-            <div>
-              <span className="text-[11px] font-mono text-emerald-400 font-bold uppercase">{cropA.category}</span>
-              <h4 className="text-xl font-bold font-display text-white">{cropA.name}</h4>
-            </div>
-            <span className="px-2.5 py-1 bg-emerald-950 border border-emerald-800 text-emerald-300 text-xs rounded-full font-semibold">
-              {cropA.season}
-            </span>
-          </div>
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between">
+          <div>
+            {/* Image Banner */}
+            <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+              <img
+                src={cropAImg}
+                alt={cropA.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-xs">
+                  Crop A · {cropA.category}
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-white/90 text-slate-800 text-xs font-semibold backdrop-blur-xs">
+                  {cropA.season}
+                </span>
+              </div>
 
-          <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-stone-500" /> Duration in Field:
-              </span>
-              <span className="text-white font-bold font-mono">{cropA.durationDays} Days</span>
-            </div>
-
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Droplets className="w-3.5 h-3.5 text-sky-400" /> Water Requirement:
-              </span>
-              <span className="text-sky-300 font-bold font-mono">
-                {cropA.waterDemandMm} mm ({cropA.waterLevel})
-              </span>
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <h4 className="text-xl font-bold font-display drop-shadow-xs">{cropA.name}</h4>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Sprout className="w-3.5 h-3.5 text-emerald-400" /> Soil Impact:
-              </span>
-              <span className={`font-semibold ${
-                cropA.soilImpact.includes('Enriches')
-                  ? 'text-emerald-400'
-                  : cropA.soilImpact.includes('Depleter')
-                  ? 'text-amber-400'
-                  : 'text-stone-300'
-              }`}>
-                {cropA.soilImpact}
-              </span>
-            </div>
+            {/* Metrics */}
+            <div className="p-6 space-y-3 text-xs">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Clock className="w-4 h-4 text-slate-500" /> Duration in Field:
+                </span>
+                <span className="text-slate-900 font-bold font-mono">{cropA.durationDays} Days</span>
+              </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Est. Net Profit:
-              </span>
-              <span className="text-emerald-300 font-bold font-mono">{cropA.estNetProfitPerAcre}</span>
-            </div>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Droplets className="w-4 h-4 text-sky-500" /> Water Requirement:
+                </span>
+                <span className="text-sky-700 font-bold font-mono">
+                  {cropA.waterDemandMm} mm ({cropA.waterLevel})
+                </span>
+              </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400">Nutritional Density:</span>
-              <span className="text-stone-200 font-medium">{cropA.proteinContent}</span>
-            </div>
-          </div>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Sprout className="w-4 h-4 text-emerald-600" /> Soil Impact:
+                </span>
+                <span className={`font-semibold ${
+                  cropA.soilImpact.includes('Enriches')
+                    ? 'text-emerald-700'
+                    : cropA.soilImpact.includes('Depleter')
+                    ? 'text-amber-700'
+                    : 'text-slate-700'
+                }`}>
+                  {cropA.soilImpact}
+                </span>
+              </div>
 
-          <div className="p-3.5 rounded-xl bg-stone-950 border border-stone-800 text-xs space-y-2">
-            <div>
-              <strong className="text-emerald-400 block text-[11px] uppercase">Best Suited For:</strong>
-              <p className="text-stone-300 mt-0.5 leading-relaxed">{cropA.bestSuitedFor}</p>
-            </div>
-            <div>
-              <strong className="text-rose-400 block text-[11px] uppercase">Key Risk Factor:</strong>
-              <p className="text-stone-400 mt-0.5 leading-relaxed">{cropA.keyRisk}</p>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/70 border border-emerald-150">
+                <span className="text-emerald-900 flex items-center gap-1.5 font-medium">
+                  <DollarSign className="w-4 h-4 text-emerald-600" /> Est. Net Profit:
+                </span>
+                <span className="text-emerald-800 font-bold font-mono text-sm">{cropA.estNetProfitPerAcre}</span>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 font-medium">Nutritional Density:</span>
+                <span className="text-slate-900 font-semibold">{cropA.proteinContent}</span>
+              </div>
+
+              {/* Agronomic Details */}
+              <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
+                <div>
+                  <strong className="text-emerald-800 block text-[11px] uppercase tracking-wide">Best Suited For:</strong>
+                  <p className="text-slate-700 mt-0.5 leading-relaxed">{cropA.bestSuitedFor}</p>
+                </div>
+                <div className="pt-2 border-t border-slate-200/60">
+                  <strong className="text-rose-800 block text-[11px] uppercase tracking-wide">Key Risk Factor:</strong>
+                  <p className="text-slate-600 mt-0.5 leading-relaxed">{cropA.keyRisk}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Crop B Card */}
-        <div className="p-6 rounded-2xl bg-stone-900/60 border border-stone-800 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-            <div>
-              <span className="text-[11px] font-mono text-amber-400 font-bold uppercase">{cropB.category}</span>
-              <h4 className="text-xl font-bold font-display text-white">{cropB.name}</h4>
-            </div>
-            <span className="px-2.5 py-1 bg-amber-950 border border-amber-800 text-amber-300 text-xs rounded-full font-semibold">
-              {cropB.season}
-            </span>
-          </div>
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between">
+          <div>
+            {/* Image Banner */}
+            <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+              <img
+                src={cropBImg}
+                alt={cropB.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                <span className="px-2.5 py-1 rounded-full bg-amber-600 text-white text-xs font-bold shadow-xs">
+                  Crop B · {cropB.category}
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-white/90 text-slate-800 text-xs font-semibold backdrop-blur-xs">
+                  {cropB.season}
+                </span>
+              </div>
 
-          <div className="space-y-3 text-xs">
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-stone-500" /> Duration in Field:
-              </span>
-              <span className="text-white font-bold font-mono">{cropB.durationDays} Days</span>
-            </div>
-
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Droplets className="w-3.5 h-3.5 text-sky-400" /> Water Requirement:
-              </span>
-              <span className="text-sky-300 font-bold font-mono">
-                {cropB.waterDemandMm} mm ({cropB.waterLevel})
-              </span>
+              <div className="absolute bottom-3 left-4 right-4 text-white">
+                <h4 className="text-xl font-bold font-display drop-shadow-xs">{cropB.name}</h4>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <Sprout className="w-3.5 h-3.5 text-emerald-400" /> Soil Impact:
-              </span>
-              <span className={`font-semibold ${
-                cropB.soilImpact.includes('Enriches')
-                  ? 'text-emerald-400'
-                  : cropB.soilImpact.includes('Depleter')
-                  ? 'text-amber-400'
-                  : 'text-stone-300'
-              }`}>
-                {cropB.soilImpact}
-              </span>
-            </div>
+            {/* Metrics */}
+            <div className="p-6 space-y-3 text-xs">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Clock className="w-4 h-4 text-slate-500" /> Duration in Field:
+                </span>
+                <span className="text-slate-900 font-bold font-mono">{cropB.durationDays} Days</span>
+              </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400 flex items-center gap-1.5">
-                <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> Est. Net Profit:
-              </span>
-              <span className="text-emerald-300 font-bold font-mono">{cropB.estNetProfitPerAcre}</span>
-            </div>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Droplets className="w-4 h-4 text-sky-500" /> Water Requirement:
+                </span>
+                <span className="text-sky-700 font-bold font-mono">
+                  {cropB.waterDemandMm} mm ({cropB.waterLevel})
+                </span>
+              </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-lg bg-stone-950 border border-stone-800/80">
-              <span className="text-stone-400">Nutritional Density:</span>
-              <span className="text-stone-200 font-medium">{cropB.proteinContent}</span>
-            </div>
-          </div>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 flex items-center gap-1.5 font-medium">
+                  <Sprout className="w-4 h-4 text-emerald-600" /> Soil Impact:
+                </span>
+                <span className={`font-semibold ${
+                  cropB.soilImpact.includes('Enriches')
+                    ? 'text-emerald-700'
+                    : cropB.soilImpact.includes('Depleter')
+                    ? 'text-amber-700'
+                    : 'text-slate-700'
+                }`}>
+                  {cropB.soilImpact}
+                </span>
+              </div>
 
-          <div className="p-3.5 rounded-xl bg-stone-950 border border-stone-800 text-xs space-y-2">
-            <div>
-              <strong className="text-amber-400 block text-[11px] uppercase">Best Suited For:</strong>
-              <p className="text-stone-300 mt-0.5 leading-relaxed">{cropB.bestSuitedFor}</p>
-            </div>
-            <div>
-              <strong className="text-rose-400 block text-[11px] uppercase">Key Risk Factor:</strong>
-              <p className="text-stone-400 mt-0.5 leading-relaxed">{cropB.keyRisk}</p>
+              <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/70 border border-emerald-150">
+                <span className="text-emerald-900 flex items-center gap-1.5 font-medium">
+                  <DollarSign className="w-4 h-4 text-emerald-600" /> Est. Net Profit:
+                </span>
+                <span className="text-emerald-800 font-bold font-mono text-sm">{cropB.estNetProfitPerAcre}</span>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-150">
+                <span className="text-slate-600 font-medium">Nutritional Density:</span>
+                <span className="text-slate-900 font-semibold">{cropB.proteinContent}</span>
+              </div>
+
+              {/* Agronomic Details */}
+              <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
+                <div>
+                  <strong className="text-amber-800 block text-[11px] uppercase tracking-wide">Best Suited For:</strong>
+                  <p className="text-slate-700 mt-0.5 leading-relaxed">{cropB.bestSuitedFor}</p>
+                </div>
+                <div className="pt-2 border-t border-slate-200/60">
+                  <strong className="text-rose-800 block text-[11px] uppercase tracking-wide">Key Risk Factor:</strong>
+                  <p className="text-slate-600 mt-0.5 leading-relaxed">{cropB.keyRisk}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Strategic Agronomist Decision Verdict Banner */}
-      <div className="mt-6 p-4 rounded-xl bg-emerald-950/50 border border-emerald-700/60 flex items-start gap-3">
-        <Sparkles className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+      <div className="mt-8 p-5 rounded-2xl bg-gradient-to-br from-emerald-50 via-emerald-50/60 to-teal-50 border border-emerald-200 shadow-xs flex items-start gap-4">
+        <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+          <Sparkles className="w-5 h-5 text-emerald-700" />
+        </div>
         <div className="text-xs">
-          <span className="font-bold text-emerald-300 uppercase tracking-wider block">
+          <span className="font-bold text-emerald-950 uppercase tracking-wider block text-sm">
             Farmesy Agronomic Verdict:
           </span>
-          <p className="text-stone-200 mt-1 leading-relaxed">
+          <p className="text-slate-700 mt-1 leading-relaxed text-xs sm:text-sm">
             {cropA.waterDemandMm < cropB.waterDemandMm
               ? `If your farm faces water table constraints or limited tube-well hours, ${cropA.name} saves approximately ${cropB.waterDemandMm - cropA.waterDemandMm} mm of water compared to ${cropB.name}.`
               : `If high water availability and heavy clay soils are present, ${cropB.name} offers specialized economic throughput.`}

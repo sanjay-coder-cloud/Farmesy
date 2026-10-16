@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Award, Calendar, Check, Droplets, Heart, Info, Leaf, Loader2, RefreshCw, Sparkles, Sun, TrendingUp, Volume2, VolumeX, Wheat as WheatIcon, Zap } from 'lucide-react';
 import { CROPS_DATA, CropDetail } from '../data/cropsData';
+import { getCropImage } from '../data/cropImages';
 
 interface LiveAlertInfo {
   currentStage: string;
@@ -146,74 +147,38 @@ export const GrainsDeepDive: React.FC = () => {
   };
 
   return (
-    <section id="grains" className="py-16 sm:py-24 bg-white border-b border-stone-200">
+    <section id="grains" className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="max-w-3xl">
-            <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-2">
+        {/* Section Header with Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wider text-emerald-600 mb-2">
               Comprehensive Agronomy Compendium · 14 Calibrated Crops
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-stone-900 font-display text-balance">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 font-display text-balance">
               Growing Grains, Pulses, Oilseeds & Cash Crops
             </h2>
-            <p className="mt-3 text-stone-600 text-sm sm:text-base leading-relaxed">
+            <p className="mt-4 text-slate-600 text-base leading-relaxed">
               Scientifically rigorous cultivation blueprints, critical moisture milestones, nutritional profiles, and live real-time seasonal advisories powered by the Gemini Agronomy Engine.
             </p>
           </div>
-
-          {/* Real-Time API Engine Trigger */}
-          <div className="shrink-0 flex items-center gap-3">
-            <button
-              onClick={handleToggleSpeech}
-              className={`p-2.5 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-colors ${
-                isSpeaking
-                  ? 'bg-rose-50 border-rose-200 text-rose-700'
-                  : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
-              }`}
-              title={isSpeaking ? 'Stop Audio' : 'Listen to Agronomist Guide'}
-            >
-              {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-emerald-600" />}
-              <span className="hidden sm:inline">{isSpeaking ? 'Stop Audio' : 'Listen Guide'}</span>
-            </button>
-
-            <button
-              onClick={() => handleFetchRealtimeUpdate()}
-              disabled={isLoadingRealtime}
-              className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-emerald-800 hover:bg-emerald-700 active:bg-emerald-900 rounded-lg shadow-sm transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:opacity-75"
-            >
-              {isLoadingRealtime ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Syncing Live Agronomy...</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Fetch Real-Time API Update</span>
-                </>
-              )}
-            </button>
+          <div className="relative">
+            <img
+              src={getCropImage(currentCrop.name)}
+              alt={currentCrop.name}
+              className="w-full h-[400px] object-cover rounded-2xl shadow-xl transition-all duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-2xl" />
+            <div className="absolute bottom-6 left-6 right-6 text-white">
+              <div className="text-xs uppercase tracking-wider font-bold text-emerald-400 mb-1">{currentCrop.category} Class</div>
+              <div className="text-xl font-bold font-display">{currentCrop.name}</div>
+              <div className="text-xs text-slate-200">{currentCrop.botanicalName} · {currentCrop.durationDays}</div>
+            </div>
           </div>
         </div>
 
-        {/* Live Status Toast Banner */}
-        {statusMessage && (
-          <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>{statusMessage}</span>
-            </div>
-            {currentLiveAlert && (
-              <span className="text-[11px] font-mono text-emerald-700">
-                Synced at {currentLiveAlert.lastUpdated}
-              </span>
-            )}
-          </div>
-        )}
-
         {/* Category Filter Tabs */}
-        <div className="mt-8 flex items-center gap-1.5 p-1 bg-stone-100/90 rounded-lg w-fit overflow-x-auto no-scrollbar max-w-full">
+        <div className="flex items-center gap-1.5 p-1 bg-white rounded-lg w-fit overflow-x-auto no-scrollbar max-w-full shadow-sm border border-slate-200">
           {[
             { id: 'all', label: 'All Crops', count: cropsList.length },
             { id: 'pulse', label: 'Pulses & Legumes', count: cropsList.filter((c) => c.category === 'pulse').length },
@@ -225,14 +190,14 @@ export const GrainsDeepDive: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all whitespace-nowrap flex items-center gap-1.5 ${
+              className={`px-4 py-2 text-sm font-semibold rounded-md transition-all whitespace-nowrap flex items-center gap-2 ${
                 selectedCategory === cat.id
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <span>{cat.label}</span>
-              <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${selectedCategory === cat.id ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-200 text-stone-600'}`}>
+              <span className={`text-xs font-mono px-2 py-0.5 rounded ${selectedCategory === cat.id ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600'}`}>
                 {cat.count}
               </span>
             </button>
@@ -240,7 +205,7 @@ export const GrainsDeepDive: React.FC = () => {
         </div>
 
         {/* Crop Selection Bar & Custom Crop Query */}
-        <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           {/* Preset Buttons for filtered category */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
             {filteredCrops.map((crop) => {
@@ -249,13 +214,13 @@ export const GrainsDeepDive: React.FC = () => {
                 <button
                   key={crop.id}
                   onClick={() => setSelectedCropId(crop.id)}
-                  className={`px-3.5 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 whitespace-nowrap shrink-0 ${
+                  className={`px-3.5 py-2 text-xs font-semibold rounded-xl transition-all flex items-center gap-2 whitespace-nowrap shrink-0 ${
                     isSelected
-                      ? 'bg-stone-900 text-white shadow-sm ring-1 ring-stone-900'
-                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200 hover:text-stone-900'
+                      ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-500/30'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50'
                   }`}
                 >
-                  <WheatIcon className={`w-3.5 h-3.5 ${isSelected ? 'text-amber-400' : 'text-stone-500'}`} />
+                  <WheatIcon className={`w-3.5 h-3.5 ${isSelected ? 'text-amber-300' : 'text-slate-400'}`} />
                   <span>{crop.name}</span>
                 </button>
               );
@@ -266,15 +231,15 @@ export const GrainsDeepDive: React.FC = () => {
           <form onSubmit={handleCustomCropSubmit} className="flex items-center gap-2 shrink-0">
             <input
               type="text"
-              placeholder="Query any crop via API (e.g. Oats, Barley, Sunflower)..."
+              placeholder="Query any crop (e.g. Oats, Barley, Sunflower)..."
               value={customCropQuery}
               onChange={(e) => setCustomCropQuery(e.target.value)}
-              className="text-xs px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-stone-800 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 w-64"
+              className="text-xs px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 w-64 shadow-2xs"
             />
             <button
               type="submit"
               disabled={isLoadingRealtime}
-              className="px-3 py-2 text-xs font-semibold bg-stone-800 hover:bg-stone-700 text-white rounded-lg transition-colors whitespace-nowrap"
+              className="px-4 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-colors whitespace-nowrap shadow-xs"
             >
               Fetch Live
             </button>
@@ -282,58 +247,59 @@ export const GrainsDeepDive: React.FC = () => {
         </div>
 
         {/* Main Crop Overview Card */}
-        <div className="mt-6 bg-stone-50 rounded-2xl border border-stone-200 p-6 sm:p-8">
-          {/* Live Alert Banner */}
-          {currentLiveAlert && (
-            <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-amber-50 to-emerald-50 border border-amber-200/80 text-xs text-stone-800 shadow-2xs">
-              <div className="flex items-center justify-between pb-2 border-b border-amber-200/60 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="font-bold text-emerald-900 uppercase tracking-wide">
-                    Live Seasonal Radar · {currentCrop.name.split(' ')[0]}
-                  </span>
+        <div className="mt-8 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Left: Content */}
+            <div className="p-8">
+              {/* Live Alert Banner */}
+              {currentLiveAlert && (
+                <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-amber-50 to-emerald-50 border border-amber-200/80 text-xs text-slate-800 shadow-sm">
+                  <div className="flex items-center justify-between pb-2 border-b border-amber-200/60 mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="font-bold text-emerald-900 uppercase tracking-wide">
+                        Live Seasonal Radar · {currentCrop.name.split(' ')[0]}
+                      </span>
+                    </div>
+                    <span className="font-mono text-[11px] text-slate-500">
+                      Last Updated: {currentLiveAlert.lastUpdated}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <strong className="text-slate-900 block font-semibold">Active Seasonal Stage:</strong>
+                      <span className="text-slate-700">{currentLiveAlert.currentStage}</span>
+                    </div>
+                    <div>
+                      <strong className="text-slate-900 block font-semibold">Agro-Weather Alert:</strong>
+                      <span className="text-slate-700">{currentLiveAlert.weatherAlert}</span>
+                    </div>
+                    <div>
+                      <strong className="text-slate-900 block font-semibold">Mandi Market Trend:</strong>
+                      <span className="text-slate-700">{currentLiveAlert.mandiPriceTrend}</span>
+                    </div>
+                  </div>
                 </div>
-                <span className="font-mono text-[11px] text-stone-500">
-                  Last Updated: {currentLiveAlert.lastUpdated}
-                </span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div>
-                  <strong className="text-stone-900 block font-semibold">Active Seasonal Stage:</strong>
-                  <span className="text-stone-700">{currentLiveAlert.currentStage}</span>
-                </div>
-                <div>
-                  <strong className="text-stone-900 block font-semibold">Agro-Weather Alert:</strong>
-                  <span className="text-stone-700">{currentLiveAlert.weatherAlert}</span>
-                </div>
-                <div>
-                  <strong className="text-stone-900 block font-semibold">Mandi Market Trend:</strong>
-                  <span className="text-stone-700">{currentLiveAlert.mandiPriceTrend}</span>
-                </div>
-              </div>
-            </div>
-          )}
+              )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left 7 Columns: Key Agronomy Specs & Cultivation Steps */}
-            <div className="lg:col-span-7 space-y-6">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono text-stone-500 italic mb-1">
-                  <span>{currentCrop.botanicalName}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="capitalize font-semibold text-emerald-800">{currentCrop.category} Class</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{currentCrop.sowingSeason}</span>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-mono text-slate-500 italic mb-1">
+                    <span>{currentCrop.botanicalName}</span>
+                    <span aria-hidden="true">·</span>
+                    <span className="capitalize font-semibold text-emerald-800">{currentCrop.category} Class</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{currentCrop.sowingSeason}</span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 font-display">
+                    {currentCrop.name}
+                  </h3>
+                  <p className="text-slate-600 text-sm mt-2 leading-relaxed">
+                    {currentCrop.summary}
+                  </p>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-stone-900 font-display">
-                  {currentCrop.name}
-                </h3>
-                <p className="text-stone-600 text-sm mt-2 leading-relaxed">
-                  {currentCrop.summary}
-                </p>
-              </div>
 
-              {/* Quick Environmental Requirements Grid */}
+                {/* Quick Environmental Requirements Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="p-3 bg-white rounded-xl border border-stone-200">
                   <div className="text-stone-500 flex items-center gap-1.5 mb-1">
@@ -456,6 +422,7 @@ export const GrainsDeepDive: React.FC = () => {
                 )}
               </div>
             </div>
+            </div>
 
             {/* Right 5 Columns: Crop Benefits & Nutrition Matrix */}
             <div className="lg:col-span-5 space-y-6">
@@ -484,51 +451,51 @@ export const GrainsDeepDive: React.FC = () => {
               </div>
 
               {/* Nutritional Fact Sheet */}
-              <div className="bg-stone-900 text-stone-100 p-6 rounded-xl border border-stone-800">
-                <div className="flex items-center justify-between pb-3 border-b border-stone-800">
+              <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950 text-white p-6 rounded-2xl border border-emerald-900/50 shadow-xl">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <div className="flex items-center gap-2">
                     <Heart className="w-4 h-4 text-emerald-400" />
-                    <span className="text-xs font-semibold uppercase tracking-wider text-stone-300">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">
                       Nutritional Profile (per 100g)
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono text-emerald-400">
+                  <span className="text-[11px] font-mono text-emerald-400 font-bold">
                     GI: {currentCrop.nutritionalValue.glycemicIndex}
                   </span>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                   <div>
-                    <span className="text-stone-400 block text-[11px]">Energy / Calories</span>
+                    <span className="text-slate-400 block text-[11px]">Energy / Calories</span>
                     <span className="font-mono font-semibold text-white text-sm">
                       {currentCrop.nutritionalValue.calories}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-stone-400 block text-[11px]">Protein Density</span>
+                    <span className="text-slate-400 block text-[11px]">Protein Density</span>
                     <span className="font-mono font-semibold text-emerald-400 text-sm">
                       {currentCrop.nutritionalValue.protein}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-stone-400 block text-[11px]">Dietary Fiber</span>
+                    <span className="text-slate-400 block text-[11px]">Dietary Fiber</span>
                     <span className="font-mono font-semibold text-white text-sm">
                       {currentCrop.nutritionalValue.fiber}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-stone-400 block text-[11px]">Carbohydrates</span>
+                    <span className="text-slate-400 block text-[11px]">Carbohydrates</span>
                     <span className="font-mono font-semibold text-white text-sm">
                       {currentCrop.nutritionalValue.carbs}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-stone-800 text-[11px] text-stone-400">
-                  <span className="font-semibold text-stone-200">Key Minerals: </span>
+                <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+                  <span className="font-semibold text-slate-200">Key Minerals: </span>
                   {currentCrop.nutritionalValue.minerals}
                 </div>
               </div>
