@@ -90,6 +90,8 @@ export const IndianCropsDirectory: React.FC = () => {
   const [liveReport, setLiveReport] = useState<LiveCropReport | null>(null);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
+  // Backdrop toggle: 2nd Image (Cotton sunset) applied to 1st category (Food Crops)
+  const [categoryBackdropTheme, setCategoryBackdropTheme] = useState<'cotton-sunset' | 'standard'>('cotton-sunset');
 
   // Selected Category
   const activeCategory = INDIAN_CROP_TYPES[selectedCategoryIndex] || INDIAN_CROP_TYPES[0];
@@ -362,22 +364,67 @@ export const IndianCropsDirectory: React.FC = () => {
             </div>
 
             {/* Active Category Hero Card */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 border border-stone-800 shadow-xl relative overflow-hidden">
+            <div className={`p-6 sm:p-8 rounded-2xl border shadow-xl relative overflow-hidden transition-all duration-700 ${
+              (activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && categoryBackdropTheme === 'cotton-sunset'
+                ? 'bg-gradient-to-br from-[#2a1005] via-[#451a03]/80 to-stone-950 border-amber-500/40 shadow-amber-950/20'
+                : 'bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 border-stone-800'
+            }`}>
+              {/* Dynamic Sunset / Cotton Artwork Background when cotton-sunset is active */}
+              {(activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && categoryBackdropTheme === 'cotton-sunset' && (
+                <div className="absolute inset-0 pointer-events-none opacity-25">
+                  <svg className="w-full h-full object-cover" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" fill="none">
+                    <circle cx="680" cy="80" r="90" fill="#f59e0b" fillOpacity="0.3" />
+                    <circle cx="680" cy="80" r="30" fill="#fde68a" fillOpacity="0.7" />
+                    {/* Cotton stalks */}
+                    <path d="M 600 300 Q 640 220 630 140" stroke="#78350f" strokeWidth="4" />
+                    <circle cx="630" cy="140" r="18" fill="#ffffff" />
+                    <circle cx="642" cy="148" r="14" fill="#ffffff" />
+                    <circle cx="618" cy="148" r="14" fill="#ffffff" />
+                    <circle cx="630" cy="158" r="15" fill="#ffffff" />
+                    <path d="M 720 300 Q 750 200 735 120" stroke="#78350f" strokeWidth="4" />
+                    <circle cx="735" cy="120" r="20" fill="#ffffff" />
+                  </svg>
+                </div>
+              )}
+
               <div className="absolute right-0 top-0 w-96 h-96 bg-emerald-900/10 rounded-full blur-3xl pointer-events-none" />
               
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <span className="px-3 py-1 rounded-md bg-emerald-900/50 border border-emerald-700 text-emerald-300 text-xs font-mono font-bold">
                       Category {activeCategory.categoryNumber} of 10
                     </span>
                     <span className="text-xs text-stone-400 uppercase tracking-widest font-semibold">
                       {activeCategory.tagline}
                     </span>
+
+                    {/* 2nd Image Backdrop Indicator & Switcher for Category 1 */}
+                    {(activeCategory.categoryNumber === 1 || activeCategory.categoryNumber === 2) && (
+                      <button
+                        onClick={() => setCategoryBackdropTheme(categoryBackdropTheme === 'cotton-sunset' ? 'standard' : 'cotton-sunset')}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition-colors"
+                        title="Toggle 2nd Image (Blooming Cotton Sunset) background"
+                      >
+                        <Sun className="w-3 h-3 text-amber-400" />
+                        <span>
+                          {categoryBackdropTheme === 'cotton-sunset'
+                            ? '🌅 2nd Image Backdrop Active'
+                            : '🌾 Switch to 2nd Image Backdrop'}
+                        </span>
+                      </button>
+                    )}
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold font-display text-white">
-                    {activeCategory.name}
+
+                  <h3 className="text-2xl sm:text-3xl font-bold font-display text-white flex items-center gap-3">
+                    <span>{activeCategory.name}</span>
+                    {activeCategory.categoryNumber === 1 && categoryBackdropTheme === 'cotton-sunset' && (
+                      <span className="text-xs font-normal text-amber-300 font-sans bg-amber-950/60 border border-amber-800/80 px-2 py-0.5 rounded-md">
+                        Enhanced with Cotton Sunset Background
+                      </span>
+                    )}
                   </h3>
+
                   <p className="text-stone-300 text-sm max-w-2xl leading-relaxed">
                     {activeCategory.definition}
                   </p>
@@ -386,7 +433,7 @@ export const IndianCropsDirectory: React.FC = () => {
                 <div className="shrink-0 flex items-center gap-3">
                   <button
                     onClick={() => handleFetchRealtimeForCrop(activeCategory.crops[0].name, activeCategory.name)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-all shadow-md"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-all shadow-md hover:-translate-y-0.5"
                   >
                     <Zap className="w-3.5 h-3.5 text-amber-300" />
                     <span>Live Gemini Update for {activeCategory.crops[0].name}</span>
